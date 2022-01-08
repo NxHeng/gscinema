@@ -519,16 +519,13 @@ public class Login extends javax.swing.JFrame {
             if(result.next()){
                 //JOptionPane.showMessageDialog(this, "Login Successful");
                 //login set user personality
-                Customer cus = new Customer(result.getString("ic"),result.getString("cus_name"));
+                Customer cus = new Customer(result.getString("ic"),result.getString("cus_name"),result.getString("email"),result.getString("cus_password"),result.getString("mobile_num"));
                 /*
                 //create client class
                 Client c = new Client(u,db);
-                //make client layout visible
-                c.setVisible(true);
-                setVisible(false);
-                dispose();
+                
                 */
-                CustomerMenu menu = new CustomerMenu();
+                CustomerMenu menu = new CustomerMenu(cus,db);
                 menu.setVisible(true);
                 dispose();
             }else{
@@ -588,16 +585,8 @@ public class Login extends javax.swing.JFrame {
                 
                 if(result.next()){
                     JOptionPane.showMessageDialog(this, "Registered Successfully");
-                    //set user personality
-                    //User u = new User(result.getString("name"),result.getString("ic"),result.getInt("pk"));
-                    //create client class and pass parameter database and user
-                    //Client c = new Client(u,db);
-                    //set client jframe visible
-                    //c.setVisible(true);
-                    //destroy login jframe
-                    //setVisible(false);
-                    //dispose();
-                    CustomerMenu menu = new CustomerMenu();
+                    Customer cus = new Customer(result.getString("ic"),result.getString("cus_name"),result.getString("email"),result.getString("cus_password"),result.getString("mobile_num"));
+                    CustomerMenu menu = new CustomerMenu(cus, db);
                     menu.setVisible(true);
                     dispose();
                 }
