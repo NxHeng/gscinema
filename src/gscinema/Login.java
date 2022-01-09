@@ -620,18 +620,10 @@ public class Login extends javax.swing.JFrame {
                 id, pass)).executeQuery();
             
             if(result.next()){
-                //JOptionPane.showMessageDialog(this, "Login Successful");
+                
                 //login set user personality
-                //Customer cus = new Customer(result.getString("ic"),result.getString("name"));
-                /*
-                //create client class
-                Client c = new Client(u,db);
-                //make client layout visible
-                c.setVisible(true);
-                setVisible(false);
-                dispose();
-                */
-                StaffMenu menu = new StaffMenu();
+                Staff stf = new Staff(result.getString("staffid"), result.getString("staffname"), result.getString("staffid"), result.getString("staffid"));
+                StaffMenu menu = new StaffMenu(stf, db);
                 menu.setVisible(true);
                 dispose();
             }else{
@@ -687,17 +679,10 @@ public class Login extends javax.swing.JFrame {
                 
                 if(result.next()){
                     JOptionPane.showMessageDialog(this, "Registered Successfully");
-                    //set user personality
-                    //User u = new User(result.getString("name"),result.getString("ic"),result.getInt("pk"));
-                    //create client class and pass parameter database and user
-                    //Client c = new Client(u,db);
-                    //set client jframe visible
-                    //c.setVisible(true);
-                    //destroy login jframe
-                    //setVisible(false);
-                    //dispose();
-                    StaffMenu sm = new StaffMenu();
+                    Staff stf = new Staff(result.getString("staffid"), result.getString("staffname"), result.getString("staffid"), result.getString("staffid"));
+                    StaffMenu sm = new StaffMenu(stf, db);
                     sm.setVisible(true);
+                    dispose();
                 }
                 else{
                     System.out.println("Error");

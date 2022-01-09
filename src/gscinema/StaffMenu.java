@@ -21,17 +21,19 @@ import javax.swing.table.DefaultTableModel;
  * @author e-hen
  */
 public class StaffMenu extends javax.swing.JFrame {
+    private Staff stf;
     private Database db;
     private String movieid_Remove;
     /**
      * Creates new form StaffMenu
      */
-    public StaffMenu() {
-        try{
-            db = new Database();
-            db.connect();
-        } catch (SQLException e) {}
+    public StaffMenu(Staff stf, Database db) {
         initComponents();
+        this.stf = stf;
+        this.db = db;
+        
+        //welcome text
+        welcomestaff.setText(stf.getName() + " (Staff)");
         
         //ADD MOVIES TAB
         //show movies
@@ -179,8 +181,9 @@ public class StaffMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        GCStitle = new javax.swing.JLabel();
+        welcomestaff = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -225,10 +228,12 @@ public class StaffMenu extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         stime3 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("GSCinema");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 153));
 
         jButton1.setText("Logout");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -237,26 +242,34 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
+        GCStitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        GCStitle.setText("GSCinema");
+        GCStitle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        welcomestaff.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        welcomestaff.setText("(Staff)");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(375, 375, 375)
+                .addContainerGap()
+                .addComponent(GCStitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(GCStitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         MovieTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -389,7 +402,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(42, Short.MAX_VALUE))
+                        .addContainerGap(54, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -488,7 +501,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addComponent(jButton4)
                         .addGap(27, 27, 27)
                         .addComponent(jLabel10)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Remove Movies", jPanel3);
@@ -615,6 +628,32 @@ public class StaffMenu extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Add Shows", jPanel4);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1281, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 451, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Remove Shows", jPanel6);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1281, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 451, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Food and Beverages", jPanel5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1008,13 +1047,14 @@ public class StaffMenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffMenu().setVisible(true);
+                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable AddShow;
+    private javax.swing.JLabel GCStitle;
     private javax.swing.JTable MovieTable;
     private javax.swing.JTable MovieTable2;
     private javax.swing.JTextArea casts1;
@@ -1025,7 +1065,6 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1044,6 +1083,8 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1061,5 +1102,6 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> theatre3;
     private javax.swing.JTextField title1;
     private javax.swing.JComboBox<String> type1;
+    private javax.swing.JLabel welcomestaff;
     // End of variables declaration//GEN-END:variables
 }
