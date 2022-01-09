@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
+import java.sql.*;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,8 +33,13 @@ public class CustomerMenu extends javax.swing.JFrame {
     String date_select;
     String time_select;
     int price_select;
+    int foodid;
     int foodprice;
     int movie_sum;
+    int selectedshowid;
+    int numofticket;
+    double wholeTotal;
+    double afterdiscountprice;
     
     ArrayList<Seat> seatlist = new ArrayList<>();
 
@@ -226,6 +232,11 @@ public class CustomerMenu extends javax.swing.JFrame {
         fbquantitydisplay = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         PaymentType = new javax.swing.JComboBox<>();
+        studentcheckbox = new javax.swing.JCheckBox();
+        studentemail = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        studentid = new javax.swing.JTextField();
         CardPaymentPanel = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -285,7 +296,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(8, 8, 8))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,9 +334,10 @@ public class CustomerMenu extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        ShowTable.setAutoscrolls(false);
         ShowTable.setColumnSelectionAllowed(false);
-        ShowTable.setMinimumSize(new java.awt.Dimension(530, 400));
+        ShowTable.setMaximumSize(new java.awt.Dimension(630, 307));
+        ShowTable.setMinimumSize(new java.awt.Dimension(630, 307));
+        ShowTable.setPreferredSize(new java.awt.Dimension(630, 307));
         ShowTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         ShowTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         ShowTable.getTableHeader().setReorderingAllowed(false);
@@ -476,11 +488,11 @@ public class CustomerMenu extends javax.swing.JFrame {
         seatpanel.setLayout(seatpanelLayout);
         seatpanelLayout.setHorizontalGroup(
             seatpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 783, Short.MAX_VALUE)
+            .addGap(0, 768, Short.MAX_VALUE)
         );
         seatpanelLayout.setVerticalGroup(
             seatpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+            .addGap(0, 329, Short.MAX_VALUE)
         );
 
         DisplayPanel.add(seatpanel, "card2");
@@ -560,7 +572,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                                     .addComponent(quantity)
                                     .addComponent(fbunitprice)))
                             .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 245, Short.MAX_VALUE)))
+                        .addGap(0, 230, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         FBPanelLayout.setVerticalGroup(
@@ -647,6 +659,18 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         });
 
+        studentcheckbox.setText("Are you a student?");
+        studentcheckbox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        studentcheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentcheckboxActionPerformed(evt);
+            }
+        });
+
+        jLabel34.setText("Student E-mail:");
+
+        jLabel35.setText("Student ID:");
+
         javax.swing.GroupLayout ConfirmationPanelLayout = new javax.swing.GroupLayout(ConfirmationPanel);
         ConfirmationPanel.setLayout(ConfirmationPanelLayout);
         ConfirmationPanelLayout.setHorizontalGroup(
@@ -654,22 +678,35 @@ public class CustomerMenu extends javax.swing.JFrame {
             .addGroup(ConfirmationPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titledisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(theatreiddisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(showdatedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(showtimedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(unitpricedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(movietypedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(seatsdisplay, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(totalpricedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fbsetdisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fbquantitydisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(ConfirmationPanelLayout.createSequentialGroup()
-                .addGap(296, 296, 296)
-                .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmationPanelLayout.createSequentialGroup()
+                        .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(ConfirmationPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(ConfirmationPanelLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(studentcheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel34)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(studentemail, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(studentid, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(totalpricedisplay, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(titledisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(fbsetdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(seatsdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(movietypedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(unitpricedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+                        .addComponent(showtimedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(showdatedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(theatreiddisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(fbquantitydisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
         ConfirmationPanelLayout.setVerticalGroup(
             ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -694,11 +731,18 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addComponent(fbquantitydisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalpricedisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(PaymentType, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(studentcheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34)
+                    .addComponent(studentemail, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel35)
+                    .addComponent(studentid, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
-                .addGap(10, 10, 10))
+                .addContainerGap())
         );
 
         DisplayPanel.add(ConfirmationPanel, "card3");
@@ -737,7 +781,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         CardPaymentPanelLayout.setHorizontalGroup(
             CardPaymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CardPaymentPanelLayout.createSequentialGroup()
-                .addGap(165, 267, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(CardPaymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(cardname)
                     .addComponent(cardnum)
@@ -757,7 +801,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(CardPaymentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE))
+                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         CardPaymentPanelLayout.setVerticalGroup(
@@ -785,7 +829,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addComponent(csv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addComponent(jButton6)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         DisplayPanel.add(CardPaymentPanel, "card5");
@@ -794,11 +838,11 @@ public class CustomerMenu extends javax.swing.JFrame {
         EwalletPanel.setLayout(EwalletPanelLayout);
         EwalletPanelLayout.setHorizontalGroup(
             EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 787, Short.MAX_VALUE)
+            .addGap(0, 772, Short.MAX_VALUE)
         );
         EwalletPanelLayout.setVerticalGroup(
             EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 294, Short.MAX_VALUE)
+            .addGap(0, 333, Short.MAX_VALUE)
         );
 
         DisplayPanel.add(EwalletPanel, "card6");
@@ -821,7 +865,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MovieList, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(MovieList, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -831,7 +875,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(TimeList, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -885,13 +929,14 @@ public class CustomerMenu extends javax.swing.JFrame {
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, 0)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(DisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -908,20 +953,19 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addComponent(jLabel5))
                     .addComponent(DateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 294, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(346, 346, 346))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton3)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -964,7 +1008,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(50, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Display Shows", jPanel2);
@@ -989,14 +1033,14 @@ public class CustomerMenu extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 699, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(830, Short.MAX_VALUE))
+                .addContainerGap(806, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(312, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Booked Tickets", jPanel3);
@@ -1049,7 +1093,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                             .addComponent(jTextField1)
                             .addComponent(jTextField2)
                             .addComponent(jTextField3))))
-                .addContainerGap(1193, Short.MAX_VALUE))
+                .addContainerGap(1169, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1084,7 +1128,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(updateProfile)
-                .addContainerGap(360, Short.MAX_VALUE))
+                .addContainerGap(417, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Profile", jPanel4);
@@ -1101,7 +1145,7 @@ public class CustomerMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1127,90 +1171,54 @@ public class CustomerMenu extends javax.swing.JFrame {
 //        // refresh the panel.
 //        seatpanel.updateUI();
 //        seatpanel.setLayout(new GridLayout(9,1,1,1));
-        int count = 0;
+        numofticket = 0;
         //double sum = 0;
-        int showid = 0;
+//        int showid = 0;
 
         for (Seat i : seatlist) {
             if(i.button.isSelected() == true){
                 //System.out.println(i.getShowid() + " " + i.getNum() + " selected.");
-                count++;
+                numofticket++;
             }
         }
         int counter = 0;
-        String[] tempNum = new String[count];
+        String[] tempNum = new String[numofticket];
         for(Seat i : seatlist){
-            if(i.button.isSelected() == true && counter < count){
+            if(i.button.isSelected() == true && counter < numofticket){
                 //System.out.println(i.getShowid() + " " + i.getNum() + " selected.");
                 tempNum[counter] = i.getNum();
-                showid = i.getShowid();
+                selectedshowid = i.getShowid();
                 counter++;
             }
         }
         String displaychosen = "";
-        for(int i = 0; i < count; i++){
+        for(int i = 0; i < numofticket; i++){
             displaychosen += tempNum[i] + "  ";
         }
 
-        //display show's information
-//        String title = "";
-//        String tid = "";
-//        String showtime = "";
-//        String showdate = "";
-//        String unitprice = "";
-//        String mtype = "";
         try{
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT movie.title, shows.theatreid, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
             "FROM ((shows\n" +
             "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
             "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
-            "WHERE shows.showid = '" + showid + "'";
+            "WHERE shows.showid = '" + selectedshowid + "'";
             ResultSet rs = stm.executeQuery(sql);
 
             while(rs.next()){
                 //title
                 titledisplay.setText(rs.getString("movie.title"));
-//                title = rs.getString("movie.title");
-//                JLabel tt = new JLabel("Title: " + title);
-//                tt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                tt.setFont(new Font("Arial", Font.BOLD, 20));
-//                seatpanel.add(tt);
-                //theatreid
+
                 theatreiddisplay.setText("Theatre ID: " + String.valueOf(rs.getInt("shows.theatreid")));
-//                tid = String.valueOf(rs.getInt("shows.theatreid"));
-//                JLabel td = new JLabel("Theatre ID: " + tid);
-//                td.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                td.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(td);
-                //showdate
+
                 showdatedisplay.setText("Date: " + rs.getString("shows.showdate"));
-//                showdate = rs.getString("shows.showdate");
-//                JLabel sd = new JLabel("Date: " + showdate);
-//                sd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                sd.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(sd);
-                //showtime
+
                 showtimedisplay.setText("Time: " + rs.getString("shows.showtime"));
-//                showtime = rs.getString("shows.showtime");
-//                JLabel st = new JLabel("Time: " + showtime);
-//                st.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                st.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(st);
-                //unitprice
+
                 unitpricedisplay.setText("Unit Price: RM" + rs.getString(String.valueOf("movie.price")));
-//                unitprice = String.valueOf("movie.price");
-//                JLabel up = new JLabel("Unit Price: " + unitprice);
-//                up.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                up.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(up);
-                //movietype
+
                 movietypedisplay.setText("Type: " + rs.getString("movie.movietype"));   
-//                mtype = rs.getString("movie.movietype");
-//                JLabel mt = new JLabel("Type: " + mtype);
-//                mt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                mt.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(mt);
+
             }
             
             
@@ -1219,34 +1227,10 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
 
                 //display chosen seat
-                seatsdisplay.setText("Seats: " + displaychosen);
-//                JLabel chosenseats = new JLabel("Seats: " + displaychosen);
-//                chosenseats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                chosenseats.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(chosenseats);
-        
-                movie_sum = count * price_select;
-                //String displaysum = String.format("TOTAL:   RM%.2f\n", sum);
-        
-                //display sum
-                //totalpricedisplay.setText(displaysum);
-//                JLabel totalprice = new JLabel(displaysum);
-//                totalprice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                totalprice.setFont(new Font("Arial", Font.PLAIN, 20));
-//                seatpanel.add(totalprice);
+        seatsdisplay.setText("Seats: " + displaychosen);
                 
-//                JButton confirm = new JButton("Proceed to Payment");
-//                confirm.addActionListener();
-//                JButton c = new JButton("Proceed to Payment");
-//                c.addActionListener(new ActionListener() {
-//                 @Override
-//                 public void actionPerformed(ActionEvent e) {
-//                     Transaction t = new Transaction();
-//                     t.setVisible(true);
-//                 }
-//              });
-//                seatpanel.add(c);
-//                seatpanel.setVisible(true);
+        movie_sum = numofticket * price_select;
+
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1261,10 +1245,10 @@ public class CustomerMenu extends javax.swing.JFrame {
         DisplayPanel.removeAll();
         DisplayPanel.add(seatpanel);
         DisplayPanel.updateUI();
-        
         seatpanel.updateUI();
         DisplayPanel.revalidate();
-        //clear table
+        
+        //clear table (METHOD)
         DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
         int rowCount = tblModel.getRowCount();
         //Remove rows one by one from the end of the table
@@ -1469,6 +1453,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     button.setEnabled(false);
                     seatpanel.add(button);
                 }else{
+                    int selectedseatid = 0;
                     String seatnum = a + Integer.toString(counter);
                     String status = "";
                     try{
@@ -1477,6 +1462,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                         ResultSet rs2 = stm2.executeQuery(sql2);
                         while(rs2.next()){
                             status = rs2.getString("status");
+                            selectedseatid = rs2.getInt("seatid");
                         }
                         Statement stm4 = db.getConnection().createStatement();
                         String sql4 = "SELECT movie.price\n" +
@@ -1498,7 +1484,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                         bt.setPreferredSize(new Dimension(10, 10));
                         bt.setEnabled(false);
                         seatpanel.add(bt);
-                        seatlist.add(new Seat(seatnum, true, Integer.parseInt(showid), bt));
+                        seatlist.add(new Seat(selectedseatid, seatnum, true, Integer.parseInt(showid), bt));
                         counter++;
                     }else{
                         JToggleButton bt = new JToggleButton(seatnum);
@@ -1507,7 +1493,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                         bt.setEnabled(true);
                         //bt.setBackground(Color.green);
                         seatpanel.add(bt);
-                        seatlist.add(new Seat(seatnum, false, Integer.parseInt(showid), bt));
+                        seatlist.add(new Seat(selectedseatid, seatnum, false, Integer.parseInt(showid), bt));
                         counter++;
                     }
                 }
@@ -1573,31 +1559,48 @@ public class CustomerMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please Select a menu"); 
         }
         else if(!selectedfood.equals("") && !quantity.getText().equals("")){
-            int qt = Integer.parseInt(quantity.getText());
-            foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * qt; 
-            fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
-            fbquantitydisplay.setText("F&B Quantity: " + qt);
-            String wholeTotal = String.format("RM%.2f",(double)(foodprice + movie_sum));
-            totalpricedisplay.setText(wholeTotal);
+            
+            try {
+                Statement stm = db.getConnection().createStatement();
+                String sql = "SELECT * FROM food WHERE fbname = '" + selectedfood + "'";
+                ResultSet rs = stm.executeQuery(sql);
+                
+                while(rs.next()){
+                    foodid = rs.getInt("fbid");
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                int qt = Integer.parseInt(quantity.getText());
+                foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * qt;
+                fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
+                fbquantitydisplay.setText("F&B Quantity: " + qt);
+                wholeTotal = (foodprice + movie_sum);
+                String displaytotal = String.format("RM%.2f", wholeTotal);
+                totalpricedisplay.setText(displaytotal);
+                
+                DisplayPanel.removeAll();
+                DisplayPanel.add(ConfirmationPanel);
+                DisplayPanel.updateUI();
+                DisplayPanel.revalidate();
+                
+                afterdiscountprice = wholeTotal;
+        }
+        else{
+            fbsetdisplay.setText("No Beverages Selected");
+            fbquantitydisplay.setText("No Quantity");
+            wholeTotal = movie_sum;
+            String displaytotal = String.format("RM%.2f",wholeTotal);
+            totalpricedisplay.setText(displaytotal);
             
             DisplayPanel.removeAll();
             DisplayPanel.add(ConfirmationPanel);
             DisplayPanel.updateUI();
             DisplayPanel.revalidate();
+            
+            afterdiscountprice = wholeTotal;
         }
-        else{
-            fbsetdisplay.setText("-");
-            fbquantitydisplay.setText("-");
-            String wholeTotal = String.format("RM%.2f",(double)(movie_sum));
-            totalpricedisplay.setText(wholeTotal);
-            DisplayPanel.removeAll();
-            DisplayPanel.add(ConfirmationPanel);
-            DisplayPanel.updateUI();
-            DisplayPanel.revalidate();
-        }
-        
-                
-        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void fbsetlistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fbsetlistActionPerformed
@@ -1644,11 +1647,36 @@ public class CustomerMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
         }
         else{
-            
-                    //RETURN_GENERATED_ID
-            
+            try {
+                
+                //RETURN_GENERATED_ID
+                String sql = "INSERT INTO booking (ic, fbid, totalprice) VALUES ('" + cus.getIc() + "', '" + foodid +"', '" + afterdiscountprice + "');";
+                PreparedStatement ps = db.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                ps.execute();
+                ResultSet rs = ps.getGeneratedKeys();
+                int bookid = 0;
+                while(rs.next()){
+                    bookid = rs.getInt(1);
+                }
+                
+                for (Seat i : seatlist) {
+                    if(i.button.isSelected() == true){
+                        Statement stm2 = db.getConnection().createStatement();
+                        String sql2 = "INSERT INTO bookdetail VALUES ('" + bookid + "','" + i.getSeatid() + "');";
+                        stm2.executeUpdate(sql2);
+                        
+                        Statement stm3 = db.getConnection().createStatement();
+                        String sql3 = "UPDATE seat\n" +
+                                      "SET status = 'Unavailable'\n" +
+                                      "WHERE seatid = '" + i.getSeatid() + "';";
+                        stm3.executeUpdate(sql3);
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Payment Succesful");
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityActionPerformed
@@ -1658,6 +1686,24 @@ public class CustomerMenu extends javax.swing.JFrame {
     private void pficActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pficActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pficActionPerformed
+
+    private void studentcheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentcheckboxActionPerformed
+        // TODO add your handling code here:
+        if(studentcheckbox.isSelected()){
+            afterdiscountprice = wholeTotal * (0.7);
+            String displayTotal = String.format("RM%.2f", afterdiscountprice);
+            totalpricedisplay.setText(displayTotal);
+            studentemail.setEnabled(true);
+            studentid.setEnabled(true);
+        }
+        else{
+            afterdiscountprice = wholeTotal;
+            String displayTotal = String.format("RM%.2f", afterdiscountprice);
+            totalpricedisplay.setText(displayTotal);
+            studentemail.setEnabled(false);
+            studentid.setEnabled(false);
+        }
+    }//GEN-LAST:event_studentcheckboxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1766,6 +1812,8 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1798,6 +1846,9 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel seatsdisplay;
     private javax.swing.JLabel showdatedisplay;
     private javax.swing.JLabel showtimedisplay;
+    private javax.swing.JCheckBox studentcheckbox;
+    private javax.swing.JTextField studentemail;
+    private javax.swing.JTextField studentid;
     private javax.swing.JLabel theatreiddisplay;
     private javax.swing.JLabel titledisplay;
     private javax.swing.JLabel totalpricedisplay;

@@ -103,7 +103,7 @@ public class StaffMenu extends javax.swing.JFrame {
             String sql = "SELECT shows.showid, shows.movieid, movie.title, shows.theatreid, theatre.size, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
                          "FROM ((shows\n"+
                          "INNER JOIN movie ON shows.movieid = movie.movieid )\n"+
-                         "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)";
+                         "INNER JOIN theatre ON shows.theatreid = theatre.theatreid);";
             ResultSet rs = stm.executeQuery(sql);
             while(rs.next()){
                 String showid = String.valueOf(rs.getInt("shows.showid"));

@@ -11,15 +11,25 @@ import javax.swing.JToggleButton;
  * @author e-hen
  */
 public class Seat {
+    private int seatid;
     private String num;
     private boolean isBooked;
     private int showid;
     JToggleButton button;
-    public Seat(String num, boolean isBooked, int showid, JToggleButton button){
+    public Seat(int seatid, String num, boolean isBooked, int showid, JToggleButton button){
+        this.seatid = seatid;
         this.num = num;
         this.isBooked = isBooked;
         this.showid = showid;
         this.button = button;
+    }
+
+    public int getSeatid() {
+        return seatid;
+    }
+
+    public void setSeatid(int seatid) {
+        this.seatid = seatid;
     }
 
     public int getShowid() {
