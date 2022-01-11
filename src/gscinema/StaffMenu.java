@@ -4,6 +4,7 @@
  */
 package gscinema;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,42 +26,26 @@ public class StaffMenu extends javax.swing.JFrame {
     private Staff stf;
     private Database db;
     private String movieid_Remove;
+    private String showid_Remove;
     /**
      * Creates new form StaffMenu
+     * @param stf
+     * @param db
      */
     public StaffMenu(Staff stf, Database db) {
         initComponents();
         this.stf = stf;
         this.db = db;
         
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         //welcome text
         welcomestaff.setText(stf.getName() + " (Staff)");
         
         //ADD MOVIES TAB
         //show movies
-        try{
-            Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT * FROM movie";
-            ResultSet rs = stm.executeQuery(sql);
-            while(rs.next()){
-                String movieid = String.valueOf(rs.getInt("movieid"));
-                String title = rs.getString("title");
-                String rdate = rs.getString("releasedate");
-                String casts = rs.getString("casts");
-                String synopsis = rs.getString("synopsis");
-                String duration = rs.getString("duration");
-                String price = String.valueOf(rs.getInt("price"));
-                String type = rs.getString("movietype");
-                String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
-                DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
-                tblModel.addRow(tbData);
-            }  
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        casts1.setLineWrap(true);
-        synopsis1.setLineWrap(true);
+        DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
+        refreshMovie(tblModel);
         
         //set default release date as today's date
         try {
@@ -76,77 +62,21 @@ public class StaffMenu extends javax.swing.JFrame {
         
         //DELETE MOVIES TAB
         //Show movies
-        try{
-            Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT * FROM movie";
-            ResultSet rs = stm.executeQuery(sql);
-            while(rs.next()){
-                String movieid = String.valueOf(rs.getInt("movieid"));
-                String title = rs.getString("title");
-                String rdate = rs.getString("releasedate");
-                String casts = rs.getString("casts");
-                String synopsis = rs.getString("synopsis");
-                String duration = rs.getString("duration");
-                String price = String.valueOf(rs.getInt("price"));
-                String type = rs.getString("movietype");
-                String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
-                DefaultTableModel tblModel = (DefaultTableModel)MovieTable2.getModel();
-                tblModel.addRow(tbData);
-            }  
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        DefaultTableModel tblModel1 = (DefaultTableModel)MovieTable2.getModel();
+        refreshMovie(tblModel1);
         
         
         //ADD SHOW TAB
         //Display shows
-        try{
-            Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT shows.showid, shows.movieid, movie.title, shows.theatreid, theatre.size, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
-                         "FROM ((shows\n"+
-                         "INNER JOIN movie ON shows.movieid = movie.movieid )\n"+
-                         "INNER JOIN theatre ON shows.theatreid = theatre.theatreid);";
-            ResultSet rs = stm.executeQuery(sql);
-            while(rs.next()){
-                String showid = String.valueOf(rs.getInt("shows.showid"));
-                String movieid = String.valueOf(rs.getInt("shows.movieid"));
-                String title = rs.getString("movie.title");
-                String theatre = String.valueOf(rs.getInt("shows.theatreid"));
-                String size = String.valueOf(rs.getInt("theatre.size"));
-                String sdate = rs.getString("shows.showdate");
-                String stime = rs.getString("shows.showtime");
-                String price = String.valueOf(rs.getInt("movie.price"));
-                String type = rs.getString("movie.movietype");   
-                String tbData[] = {showid, movieid, title, theatre, size, sdate, stime, price, type};
-                DefaultTableModel tblModel = (DefaultTableModel)AddShow.getModel();
-                tblModel.addRow(tbData);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        DefaultTableModel tblModel2 = (DefaultTableModel)AddShow.getModel();
+        refreshShows(tblModel2);
+        
+        //REMOVE SHOW TAB
+        DefaultTableModel tblModel3 = (DefaultTableModel)RemoveShows.getModel();
+        refreshShows(tblModel3);
         
         //Combo Box Movie
-        try{
-            ArrayList<String> movieid = new ArrayList<>();
-            ArrayList<String> title = new ArrayList<>();
-            Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT * FROM movie ORDER BY movieid ASC";
-            ResultSet rs = stm.executeQuery(sql);
-            while(rs.next()){
-                movieid.add(String.valueOf(rs.getInt("movieid")));
-                title.add(rs.getString("title"));
-            }
-            String[] combine = new String[movieid.size()];
-            for(int i = 0; i < movieid.size(); i++){
-                combine[i] = movieid.get(i) + " - " + title.get(i);
-            }
-            for(String item : combine){
-                movie3.addItem(item);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        movieComboBox();
         
         //Combo Box Theatre
         try{
@@ -190,8 +120,6 @@ public class StaffMenu extends javax.swing.JFrame {
         MovieTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         title1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        movieid1 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         releasedate1 = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
@@ -213,15 +141,12 @@ public class StaffMenu extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         MovieTable2 = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         AddShow = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         movie3 = new javax.swing.JComboBox<>();
-        showid3 = new javax.swing.JTextField();
         theatre3 = new javax.swing.JComboBox<>();
         sdate3 = new com.toedter.calendar.JDateChooser();
         jLabel14 = new javax.swing.JLabel();
@@ -229,6 +154,9 @@ public class StaffMenu extends javax.swing.JFrame {
         stime3 = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        RemoveShows = new javax.swing.JTable();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jPanel5 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -292,14 +220,6 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Movie ID:");
-
-        movieid1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                movieid1ActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText("Release Date:");
 
         releasedate1.setDateFormatString("dd-MM-yyyy");
@@ -316,7 +236,9 @@ public class StaffMenu extends javax.swing.JFrame {
         jLabel6.setText("Synopsis:");
 
         synopsis1.setColumns(20);
+        synopsis1.setLineWrap(true);
         synopsis1.setRows(5);
+        synopsis1.setWrapStyleWord(true);
         jScrollPane3.setViewportView(synopsis1);
 
         jLabel7.setText("Duration:");
@@ -366,33 +288,33 @@ public class StaffMenu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(title1)
-                    .addComponent(movieid1)
-                    .addComponent(releasedate1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane3)
-                    .addComponent(duration1)
-                    .addComponent(price1)
-                    .addComponent(type1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 5, Short.MAX_VALUE)
-                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(title1)
+                            .addComponent(releasedate1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3)
+                            .addComponent(duration1)
+                            .addComponent(price1)
+                            .addComponent(type1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -404,10 +326,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(54, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(movieid1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
+                        .addGap(31, 31, 31)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(title1))
@@ -454,7 +373,15 @@ public class StaffMenu extends javax.swing.JFrame {
             new String [] {
                 "Movie ID", "Title", "Release Date", "Casts", "Synopsis", "Duration", "Price", "Type"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         MovieTable2.setRowHeight(40);
         MovieTable2.getTableHeader().setReorderingAllowed(false);
         MovieTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -471,23 +398,16 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setText("// Maybe need to delete Show and Seat as well");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addGap(107, 107, 107))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(53, 53, 53))))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 944, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(164, 164, 164))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,10 +417,8 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(196, 196, 196)
-                        .addComponent(jButton4)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel10)))
+                        .addGap(195, 195, 195)
+                        .addComponent(jButton4)))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
 
@@ -521,17 +439,9 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jLabel12.setText("Theatre:");
 
-        jLabel13.setText("Show ID:");
-
         movie3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 movie3ActionPerformed(evt);
-            }
-        });
-
-        showid3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showid3ActionPerformed(evt);
             }
         });
 
@@ -570,29 +480,22 @@ public class StaffMenu extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sdate3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sdate3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(theatre3, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(movie3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(theatre3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(showid3, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(stime3))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
                         .addComponent(jButton6)
-                        .addGap(191, 191, 191))))
+                        .addGap(280, 280, 280))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,11 +505,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(showid3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(111, 111, 111)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(movie3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -622,22 +521,66 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel15)
                             .addComponent(stime3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(61, 61, 61)
+                        .addGap(55, 55, 55)
                         .addComponent(jButton6)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Add Shows", jPanel4);
+
+        RemoveShows.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Show ID", "Movie ID", "Title", "Theatre ID", "Theatre Size", "Show Date", "Show Time", "Price", "Type"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        RemoveShows.getTableHeader().setReorderingAllowed(false);
+        RemoveShows.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RemoveShowsMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(RemoveShows);
+
+        jToggleButton1.setText("Remove Selected Show");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1281, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 943, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addComponent(jToggleButton1)
+                .addGap(158, 158, 158))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 451, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(205, 205, 205)
+                        .addComponent(jToggleButton1)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Remove Shows", jPanel6);
@@ -646,7 +589,7 @@ public class StaffMenu extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1281, Short.MAX_VALUE)
+            .addGap(0, 1445, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -678,10 +621,6 @@ public class StaffMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_title1ActionPerformed
 
-    private void movieid1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieid1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_movieid1ActionPerformed
-
     private void price1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_price1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_price1ActionPerformed
@@ -690,14 +629,13 @@ public class StaffMenu extends javax.swing.JFrame {
         
         
         DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
+        DefaultTableModel tblModel2 = (DefaultTableModel)MovieTable2.getModel();
         //Remove rows one by one from the end of the table
-        int rowCount = tblModel.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            tblModel.removeRow(i);
-        }
+        clearTable(tblModel);
+        clearTable(tblModel2);
         
         try{
-            String movieid2 = movieid1.getText();
+            //String movieid2 = movieid1.getText();
             String title2 = title1.getText();
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
             String date2 = s.format(releasedate1.getDate());
@@ -707,19 +645,20 @@ public class StaffMenu extends javax.swing.JFrame {
             String price2 = price1.getText();
             String type2 = (String) type1.getSelectedItem();
             
-            if(movieid2.equals("")||title2.equals("")||date2.equals("")||casts2.equals("")||synopsis2.equals("")||duration2.equals("")||price2.equals("")||type2.equals("")){
+            if(title2.equals("")||date2.equals("")||casts2.equals("")||synopsis2.equals("")||duration2.equals("")||price2.equals("")||type2.equals("")){
+                //movieid2.equals("")||
                 JOptionPane.showMessageDialog(this, "Please fill in the blank(s)");
             }
             else{
                 Statement stm = db.getConnection().createStatement();
-                String sql2 = "INSERT INTO movie VALUES('" + movieid2 +"', '" + title2 + "', '" + date2 +"', "
-                        + "'" + casts2 + "', '" + synopsis2 + "', '" + duration2 + "', '" + price2 + "', '" + type2 + "')";
+                String sql2 = "INSERT INTO movie (title, releasedate, casts, synopsis, duration, price, movietype)" + 
+                              "VALUES('" + title2 + "', '" + date2 +"', "+
+                              "'" + casts2 + "', '" + synopsis2 + "', '" + duration2 + "', '" + price2 + "', '" + type2 + "')";
                 stm.executeUpdate(sql2);
                 
                 JOptionPane.showMessageDialog(this, "The movie added succesfully");
                 
                 //clear fill
-                movieid1.setText("");
                 title1.setText("");
                 //set to current date (default) after adding a movie
                 try {
@@ -736,27 +675,13 @@ public class StaffMenu extends javax.swing.JFrame {
                 duration1.setText("");
                 price1.setText("");
                 
-                //refresh
-                try{
-                    Statement stmt = db.getConnection().createStatement();
-                    String sql = "SELECT * FROM movie";
-                    ResultSet rs = stmt.executeQuery(sql);
-                    while(rs.next()){
-                        String movieid = String.valueOf(rs.getInt("movieid"));
-                        String title = rs.getString("title");
-                        String rdate = rs.getString("releasedate");
-                        String casts = rs.getString("casts");
-                        String synopsis = rs.getString("synopsis");
-                        String duration = rs.getString("duration");
-                        String price = String.valueOf(rs.getInt("price"));
-                        String type = rs.getString("movietype");
-                        String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
-                        
-                        tblModel.addRow(tbData);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                //refresh add movie table
+                refreshMovie(tblModel);
+                //refresh remove movie table
+                refreshMovie(tblModel2);
+                //refresh movie combo box
+                movieComboBox();
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -765,22 +690,21 @@ public class StaffMenu extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-                movieid1.setText("");
-                title1.setText("");
-                try {
-                    Date temp = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
-                    String tempdate = sdf.format(temp);
-                    Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
-                    releasedate1.setDate(current);
+        title1.setText("");
+        try {
+        Date temp = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+        String tempdate = sdf.format(temp);
+        Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
+        releasedate1.setDate(current);
 
-                } catch (ParseException ex) {
-                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                casts1.setText("");
-                synopsis1.setText("");
-                duration1.setText("");
-                price1.setText("");
+        } catch (ParseException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        casts1.setText("");
+        synopsis1.setText("");
+        duration1.setText("");
+        price1.setText("");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -795,94 +719,88 @@ public class StaffMenu extends javax.swing.JFrame {
         //Store movie id to a temporary variable
         DefaultTableModel model = (DefaultTableModel)MovieTable2.getModel();
         int selectedRowIndex = MovieTable2.getSelectedRow();
-        movieid_Remove  = model.getValueAt(selectedRowIndex, 0).toString();
+        movieid_Remove = model.getValueAt(selectedRowIndex, 0).toString();
+        
     }//GEN-LAST:event_MovieTable2MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         
-        DefaultTableModel tblModel = (DefaultTableModel)MovieTable2.getModel();
-        
+        DefaultTableModel tblModel1 = (DefaultTableModel)MovieTable.getModel();
+        DefaultTableModel tblModel2 = (DefaultTableModel)MovieTable2.getModel();
+        DefaultTableModel tblModel3 = (DefaultTableModel)AddShow.getModel();
+        DefaultTableModel tblModel4 = (DefaultTableModel)RemoveShows.getModel();
         //For refreshing table after deleting movie
         //Remove rows one by one from the end of the table
-        int rowCount = tblModel.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            tblModel.removeRow(i);
-        }
+        //clearTable(tblModel);
         
         //Delete selected movie(row) where movie id is stored in 'movieid_Remove'
-        try{
-            Statement stm = db.getConnection().createStatement();
-            String sql = "DELETE FROM movie WHERE movieid = '" + movieid_Remove + "';";
-            stm.executeUpdate(sql);
-            //refresh table after delete movie
-            try{
-                    Statement stmt = db.getConnection().createStatement();
-                    String sql1 = "SELECT * FROM movie";
-                    ResultSet rs = stmt.executeQuery(sql1);
-                    while(rs.next()){
-                        String movieid = String.valueOf(rs.getInt("movieid"));
-                        String title = rs.getString("title");
-                        String rdate = rs.getString("releasedate");
-                        String casts = rs.getString("casts");
-                        String synopsis = rs.getString("synopsis");
-                        String duration = rs.getString("duration");
-                        String price = String.valueOf(rs.getInt("price"));
-                        String type = rs.getString("movietype");
-                        String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
-                        tblModel.addRow(tbData);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try{
+//            String temptemp = movieid_Remove;
+//            System.out.println(temptemp);
+//            
+//            Statement stm = db.getConnection().createStatement();
+//            String sql = "DELETE FROM movie WHERE movieid = '" + movieid_Remove + "';";
+//            stm.executeUpdate(sql);
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        //Removie related Shows
+//        //DefaultTableModel tblModel4 = (DefaultTableModel)RemoveShow.getModel();
+//        try{
+//            Statement stm = db.getConnection().createStatement();
+//            String sql1 = "DELETE FROM shows WHERE movieid = '" + movieid_Remove + "';";
+//            
+//            /*
+//            String sql1 = "DELETE shows, seat, booking, bookdetail\n" +
+//                          "FROM ((((((bookdetail\n" +
+//                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+//                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+//                          "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+//                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+//                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+//                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+//                          "WHERE movieid = '" + movieid_Remove + "';";
+//            */
+//            stm.executeUpdate(sql1);
+//            //refresh remove movie table after delete movie
+//            refreshShows(tblModel3);
+//            //refresh add movie table
+//            //refreshShows(tblModel1);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        deleteMovie(movieid_Remove);
+        
+        //refresh remove movie table after delete movie
+        refreshMovie(tblModel1);
+        //refresh add movie table
+        refreshMovie(tblModel2);
+        //refresh remove movie table after delete movie
+        refreshShows(tblModel3);
+        //refresh add movie table
+        refreshShows(tblModel4);
+        //refresh movie combo box
+        movieComboBox();
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         
         DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel(); 
-        //For refreshing table
-        //Remove rows one by one from the end of the table
-        int rowCount = tblModel.getRowCount();
-        for (int i = rowCount - 1; i >= 0; i--) {
-            tblModel.removeRow(i);
-        }
-        //refresh table 
-        try{
-            Statement stmt = db.getConnection().createStatement();
-            String sql1 = "SELECT * FROM movie";
-            ResultSet rs = stmt.executeQuery(sql1);
-            while(rs.next()){
-                String movieid = String.valueOf(rs.getInt("movieid"));
-                String title = rs.getString("title");
-                String rdate = rs.getString("releasedate");
-                String casts = rs.getString("casts");
-                String synopsis = rs.getString("synopsis");
-                String duration = rs.getString("duration");
-                String price = String.valueOf(rs.getInt("price"));
-                String type = rs.getString("movietype");
-                String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
-                tblModel.addRow(tbData);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        refreshMovie(tblModel);
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void stime3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stime3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_stime3ActionPerformed
 
-    private void showid3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showid3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_showid3ActionPerformed
-
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         
         //ADD SHOW BUTTON
-        String showid = showid3.getText();
+        String showid = ""; //= showid3.getText();
         String movieid = (String) movie3.getSelectedItem();
         //to get the movie id at the first position
         movieid = movieid.substring(0, 1);
@@ -893,14 +811,25 @@ public class StaffMenu extends javax.swing.JFrame {
         String date = sdf.format(sdate3.getDate());
         String time = stime3.getText();
         try{
-            if(showid.equals("")||movieid.equals("")||theatreid.equals("")||date.equals("")||time.equals("")){
+            if(movieid.equals("")||theatreid.equals("")||date.equals("")||time.equals("")){
+                //showid.equals("")||
                 JOptionPane.showMessageDialog(this, "Please fill in the blank(s)");
             }
             else{
-                Statement stm = db.getConnection().createStatement();
-                String sql = "INSERT INTO SHOWS VALUES('" + showid + "', '" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
-                stm.executeUpdate(sql);
-                
+//                Statement stm = db.getConnection().createStatement();
+//                String sql = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
+//                             "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
+//                stm.executeUpdate(sql);
+
+                String sql = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
+                             "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
+                PreparedStatement ps = db.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                ps.execute();
+                ResultSet rs = ps.getGeneratedKeys();
+                while(rs.next()){
+                    showid = String.valueOf(rs.getInt(1));
+                }
+
                 JOptionPane.showMessageDialog(this, "The movie added succesfully");
                 
                 //GENERATE TICKETS FOR ALL SEATS
@@ -921,8 +850,6 @@ public class StaffMenu extends javax.swing.JFrame {
                 else{
                     theatresize = temp.substring(3, 5);
                 }
-                //theatresize = temp.substring(3, 5);
-                
                 
                 int size = Integer.parseInt(theatresize);
                 char finalrow = 'E';
@@ -951,8 +878,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 }
                 
                 
-                //CLAER FILLS
-                showid3.setText("");
+                //CLEAR FILLS
                 movie3.setSelectedIndex(0);
                 theatre3.setSelectedIndex(0);
                 //set to default date after adding a show
@@ -962,43 +888,16 @@ public class StaffMenu extends javax.swing.JFrame {
                     String tempdate = sdf2.format(temp2);
                     Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
                     sdate3.setDate(current);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 stime3.setText("");
                 
                 //REFRESH TABLE
                 DefaultTableModel tblModel = (DefaultTableModel)AddShow.getModel(); 
-                //For refreshing table
-                //Remove rows one by one from the end of the table
-                int rowCount = tblModel.getRowCount();
-                for (int i = rowCount - 1; i >= 0; i--) {
-                    tblModel.removeRow(i);
-                }
-                //refresh table 
-                try{
-                    Statement stmt = db.getConnection().createStatement();
-                    String sql1 = "SELECT shows.showid, shows.movieid, movie.title, shows.theatreid, theatre.size, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
-                                 "FROM ((shows\n"+
-                                 "INNER JOIN movie ON shows.movieid = movie.movieid )\n"+
-                                 "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)";
-                    ResultSet rs = stmt.executeQuery(sql1);
-                    while(rs.next()){
-                        String showid2 = String.valueOf(rs.getInt("shows.showid"));
-                        String movieid2 = String.valueOf(rs.getInt("shows.movieid"));
-                        String title = rs.getString("movie.title");
-                        String theatre = String.valueOf(rs.getInt("shows.theatreid"));
-                        String tsize = String.valueOf(rs.getInt("theatre.size"));
-                        String sdate = rs.getString("shows.showdate");
-                        String stime = rs.getString("shows.showtime");
-                        String price = String.valueOf(rs.getInt("movie.price"));
-                        String type = rs.getString("movie.movietype");   
-                        String tbData[] = {showid2, movieid2, title, theatre, tsize, sdate, stime, price, type};
-                        tblModel.addRow(tbData);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                refreshShows(tblModel);
+                DefaultTableModel tblModel1 = (DefaultTableModel)RemoveShows.getModel(); 
+                refreshShows(tblModel1);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1016,6 +915,45 @@ public class StaffMenu extends javax.swing.JFrame {
     private void theatre3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theatre3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_theatre3ActionPerformed
+
+    private void RemoveShowsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RemoveShowsMouseClicked
+        DefaultTableModel model = (DefaultTableModel)RemoveShows.getModel();
+        int selectedRowIndex = RemoveShows.getSelectedRow();
+        showid_Remove = model.getValueAt(selectedRowIndex, 0).toString();
+    }//GEN-LAST:event_RemoveShowsMouseClicked
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        
+        DefaultTableModel tblModel3 = (DefaultTableModel)AddShow.getModel();
+        DefaultTableModel tblModel4 = (DefaultTableModel)RemoveShows.getModel();
+//        try{
+//            Statement stm = db.getConnection().createStatement();
+//            String sql1 = "DELETE FROM shows WHERE movieid = '" + movieid_Remove + "';";
+//            
+//            /*
+//            String sql1 = "DELETE shows, seat, booking, bookdetail\n" +
+//                          "FROM ((((((bookdetail\n" +
+//                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+//                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+//                          "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+//                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+//                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+//                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+//                          "WHERE movieid = '" + movieid_Remove + "';";
+//            */
+//            stm.executeUpdate(sql1);
+//            //refresh remove movie table after delete movie
+//            refreshShows(tblModel3);
+//            //refresh add movie table
+//            refreshShows(tblModel4);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+        deleteShows(showid_Remove);
+        refreshShows(tblModel3);
+        refreshShows(tblModel4);
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1051,12 +989,197 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void refreshMovie(DefaultTableModel tblModel){
+        clearTable(tblModel);
+        //refresh table 
+        try{
+            Statement stmt = db.getConnection().createStatement();
+            String sql1 = "SELECT * FROM movie";
+            ResultSet rs = stmt.executeQuery(sql1);
+            while(rs.next()){
+                String movieid = String.valueOf(rs.getInt("movieid"));
+                String title = rs.getString("title");
+                String rdate = rs.getString("releasedate");
+                String casts = rs.getString("casts");
+                String synopsis = rs.getString("synopsis");
+                String duration = rs.getString("duration");
+                String price = String.valueOf(rs.getInt("price"));
+                String type = rs.getString("movietype");
+                String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
+                tblModel.addRow(tbData);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void clearTable(DefaultTableModel tblModel){
+        int rowCount = tblModel.getRowCount();
+        for (int i = rowCount - 1; i >= 0; i--) {
+            tblModel.removeRow(i);
+        }
+    }
+    
+    public void refreshShows(DefaultTableModel tblModel){
+        clearTable(tblModel);
+        
+        try{
+            Statement stm = db.getConnection().createStatement();
+            String sql = "SELECT shows.showid, shows.movieid, movie.title, shows.theatreid, theatre.size, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
+                         "FROM ((shows\n"+
+                         "INNER JOIN movie ON shows.movieid = movie.movieid )\n"+
+                         "INNER JOIN theatre ON shows.theatreid = theatre.theatreid);";
+            ResultSet rs = stm.executeQuery(sql);
+            while(rs.next()){
+                String showid = String.valueOf(rs.getInt("shows.showid"));
+                String movieid = String.valueOf(rs.getInt("shows.movieid"));
+                String title = rs.getString("movie.title");
+                String theatre = String.valueOf(rs.getInt("shows.theatreid"));
+                String size = String.valueOf(rs.getInt("theatre.size"));
+                String sdate = rs.getString("shows.showdate");
+                String stime = rs.getString("shows.showtime");
+                String price = String.valueOf(rs.getInt("movie.price"));
+                String type = rs.getString("movie.movietype");   
+                String tbData[] = {showid, movieid, title, theatre, size, sdate, stime, price, type};
+                tblModel.addRow(tbData);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void movieComboBox(){
+        movie3.removeAllItems();
+        try{
+            ArrayList<String> movieid = new ArrayList<>();
+            ArrayList<String> title = new ArrayList<>();
+            Statement stm = db.getConnection().createStatement();
+            String sql = "SELECT * FROM movie ORDER BY movieid ASC";
+            ResultSet rs = stm.executeQuery(sql);
+            while(rs.next()){
+                movieid.add(String.valueOf(rs.getInt("movieid")));
+                title.add(rs.getString("title"));
+            }
+            String[] combine = new String[movieid.size()];
+            for(int i = 0; i < movieid.size(); i++){
+                combine[i] = movieid.get(i) + " - " + title.get(i);
+            }
+            for(String item : combine){
+                movie3.addItem(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteMovie(String movieid){
+        
+        try{
+            
+            Statement stm = db.getConnection().createStatement();
+            String sql = "SELECT DISTINCT bookdetail.bookid \n" +
+                         "FROM ((((((bookdetail\n" +
+                         "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+                         "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+                         "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                         "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+                         "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                         "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+                         "WHERE shows.movieid = '" + movieid + "';";
+            ResultSet rs = stm.executeQuery(sql);
+            while(rs.next()){
+                String bookid = String.valueOf(rs.getInt("bookdetail.bookid"));
+                
+                //Delete bookdetail
+                Statement stm1 = db.getConnection().createStatement();
+                String sql1 = "DELETE FROM bookdetail WHERE bookid = '" + bookid + "'";
+                stm1.executeUpdate(sql1);
+                
+                //Delete booking
+                Statement stm2 = db.getConnection().createStatement();
+                String sql2 = "DELETE FROM booking WHERE bookid = '" + bookid + "'";
+                stm2.executeUpdate(sql2);
+            }
+            
+            //Delete seat
+            Statement stm3 = db.getConnection().createStatement();
+            String sql3 = "DELETE seat\n" +
+                          "FROM ((seat\n" +
+                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+                          "WHERE shows.movieid = '" + movieid + "';";
+            stm3.executeUpdate(sql3);
+            
+            //Delete shows
+            Statement stm4 = db.getConnection().createStatement();
+            String sql4 = "DELETE shows\n" +
+                          "FROM (shows\n" +
+                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+                          "WHERE shows.movieid = '" + movieid + "';";
+            stm4.executeUpdate(sql4);
+            
+            //Delete movie
+            Statement stm5 = db.getConnection().createStatement();
+            String sql5 = "DELETE FROM movie WHERE movieid = '" + movieid + "';";
+            stm5.executeUpdate(sql5);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteShows(String showid){
+        try{
+            //select bookid from table
+            Statement stm = db.getConnection().createStatement();
+            String sql = "SELECT DISTINCT bookdetail.bookid\n" +
+                         "FROM (((((bookdetail\n" +
+                         "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+                         "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+                         "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                         "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+                         "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                         "WHERE shows.showid = '" + showid + "';";
+            ResultSet rs = stm.executeQuery(sql);
+            while(rs.next()){
+                String bookid = String.valueOf(rs.getInt("bookdetail.bookid"));
+                
+                //Delete bookdetail
+                Statement stm1 = db.getConnection().createStatement();
+                String sql1 = "DELETE FROM bookdetail WHERE bookid = '" + bookid + "'";
+                stm1.executeUpdate(sql1);
+                
+                //Delete booking
+                Statement stm2 = db.getConnection().createStatement();
+                String sql2 = "DELETE FROM booking WHERE bookid = '" + bookid + "'";
+                stm2.executeUpdate(sql2);
+            }
+            
+            //Delete seat
+            Statement stm3 = db.getConnection().createStatement();
+            String sql3 = "DELETE seat\n" +
+                          "FROM (seat\n" +
+                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                          "WHERE shows.showid = '" + showid + "';";
+            stm3.executeUpdate(sql3);
+            
+            //Delete shows
+            Statement stm4 = db.getConnection().createStatement();
+            String sql4 = "DELETE FROM shows WHERE showid = '" + showid + "'";
+            stm4.executeUpdate(sql4);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable AddShow;
     private javax.swing.JLabel GCStitle;
     private javax.swing.JTable MovieTable;
     private javax.swing.JTable MovieTable2;
+    private javax.swing.JTable RemoveShows;
     private javax.swing.JTextArea casts1;
     private javax.swing.JTextField duration1;
     private javax.swing.JButton jButton1;
@@ -1065,14 +1188,11 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1090,13 +1210,13 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JComboBox<String> movie3;
-    private javax.swing.JTextField movieid1;
     private javax.swing.JTextField price1;
     private com.toedter.calendar.JDateChooser releasedate1;
     private com.toedter.calendar.JDateChooser sdate3;
-    private javax.swing.JTextField showid3;
     private javax.swing.JTextField stime3;
     private javax.swing.JTextArea synopsis1;
     private javax.swing.JComboBox<String> theatre3;

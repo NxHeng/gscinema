@@ -126,7 +126,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="MovieList" min="-2" pref="254" max="-2" attributes="0"/>
+                              <Component id="MovieList" min="-2" pref="242" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel3" min="-2" pref="30" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -134,9 +134,9 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel4" min="-2" pref="31" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TimeList" min="-2" pref="129" max="-2" attributes="0"/>
+                              <Component id="TimeList" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="Search" pref="0" max="32767" attributes="0"/>
+                              <Component id="Search" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="jLabel11" min="-2" pref="83" max="-2" attributes="0"/>
@@ -214,12 +214,10 @@
                           <Component id="jScrollPane1" alignment="0" min="-2" pref="715" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jLabel5" max="32767" attributes="0"/>
-                              <Component id="DisplayPanel" min="-2" pref="772" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jButton1" min="-2" pref="778" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="DisplayPanel" min="-2" pref="772" max="-2" attributes="0"/>
+                          <Component id="bookbutton" alignment="1" pref="778" max="32767" attributes="0"/>
+                          <Component id="jLabel5" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -253,9 +251,9 @@
                               <EmptySpace min="-2" pref="346" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="bookbutton" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1230,13 +1228,13 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="bookbutton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Book"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bookbuttonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -1284,8 +1282,8 @@
                       <Table columnCount="7" rowCount="0">
                         <Column editable="false" title="Book ID" type="java.lang.Object"/>
                         <Column editable="false" title="Movie Title" type="java.lang.Object"/>
-                        <Column editable="false" title="Seat Number" type="java.lang.Object"/>
                         <Column editable="false" title="Theatre" type="java.lang.Object"/>
+                        <Column editable="false" title="Seat Number" type="java.lang.Object"/>
                         <Column editable="false" title="Date" type="java.lang.Object"/>
                         <Column editable="false" title="Time" type="java.lang.Object"/>
                         <Column editable="false" title="Price" type="java.lang.Object"/>

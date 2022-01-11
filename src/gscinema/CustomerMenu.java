@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,19 +30,19 @@ import javax.swing.table.DefaultTableModel;
 public class CustomerMenu extends javax.swing.JFrame {
     private Customer cus;
     private Database db;
-    String theatreid_select;
-    String date_select;
-    String time_select;
-    int price_select;
-    int foodid;
-    int foodprice;
-    int movie_sum;
-    int selectedshowid;
-    int numofticket;
-    double wholeTotal;
-    double afterdiscountprice;
+    private String theatreid_select;
+    private String date_select;
+    private String time_select;
+    private int price_select;
+    private int foodid;
+    private int foodprice;
+    private int movie_sum;
+    private int selectedshowid;
+    private int numofticket;
+    private double wholeTotal;
+    private double afterdiscountprice;
     
-    ArrayList<Seat> seatlist = new ArrayList<>();
+    private ArrayList<Seat> seatlist = new ArrayList<>();
 
 //    @Override
 //    public void setExtendedState(int state) {
@@ -64,41 +65,12 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         
         //List out all the shows (METHOD)
-        displayShows();
+        DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
+        displayShows(tblModel);
         
         //List out all the booked tickets (Record)
-        try{
-            Statement stm1 = db.getConnection().createStatement();
-            String sql1 = "SELECT *\n" +
-                          "FROM ((((((bookdetail\n" +
-                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
-                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
-                          "INNER JOIN food ON booking.fbid = food.fbid)\n" +
-                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
-                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
-                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
-                          "WHERE customer.ic = '" + cus.getIc() +"'\n" +
-                          "ORDER BY bookdetail.bookid;";
-                    
-            ResultSet rs1 = stm1.executeQuery(sql1);
-            
-            while(rs1.next()){
-                String bookid = String.valueOf(rs1.getInt("bookid"));
-                String title = rs1.getString("title");
-                String theatre = String.valueOf(rs1.getInt("theatreid"));
-                String seatnum = rs1.getString("seatnum");
-                String sdate = rs1.getString("showdate");
-                String stime = rs1.getString("showtime");
-                String price = String.valueOf(rs1.getInt("totalprice"));
-                String tbData[] = {bookid, title, theatre, seatnum, sdate, stime, price};
-                DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
-                tblModel1.addRow(tbData);
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
+        displayRecord(tblModel1);
         
         
         //MovieList
@@ -157,10 +129,10 @@ public class CustomerMenu extends javax.swing.JFrame {
             for (String i : foodlist) {
                 fbsetlist.addItem(i);
             }
-            
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         displayProfile(cus);
     }
 
@@ -260,7 +232,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         expdate = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         EwalletPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        bookbutton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tickettable = new javax.swing.JTable();
@@ -861,11 +833,11 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         DisplayPanel.add(EwalletPanel, "card6");
 
-        jButton1.setText("Book");
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bookbutton.setText("Book");
+        bookbutton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bookbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bookbuttonActionPerformed(evt);
             }
         });
 
@@ -879,7 +851,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MovieList, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(MovieList, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -887,9 +859,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(TimeList, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TimeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addComponent(Search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -945,11 +917,10 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bookbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -976,9 +947,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(346, 346, 346))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bookbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1032,7 +1003,7 @@ public class CustomerMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Book ID", "Movie Title", "Seat Number", "Theatre", "Date", "Time", "Price"
+                "Book ID", "Movie Title", "Theatre", "Seat Number", "Date", "Time", "Price"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -1179,20 +1150,26 @@ public class CustomerMenu extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bookbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookbuttonActionPerformed
         
-        DisplayPanel.removeAll();
-        DisplayPanel.add(FBPanel);
-        DisplayPanel.updateUI();
-        DisplayPanel.revalidate();
         numofticket = 0;
-
         for (Seat i : seatlist) {
             if(i.button.isSelected() == true){
                 //System.out.println(i.getShowid() + " " + i.getNum() + " selected.");
                 numofticket++;
             }
         }
+        
+//        if(numofticket == 0){
+//            bookbutton.setEnabled(false);
+//        }
+        
+//        DisplayPanel.removeAll();
+//        DisplayPanel.add(FBPanel);
+//        DisplayPanel.updateUI();
+//        DisplayPanel.revalidate();
+        displayPanelChange(FBPanel);
+
         int counter = 0;
         String[] tempNum = new String[numofticket];
         for(Seat i : seatlist){
@@ -1210,24 +1187,19 @@ public class CustomerMenu extends javax.swing.JFrame {
         try{
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT movie.title, shows.theatreid, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
-            "FROM ((shows\n" +
-            "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
-            "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
-            "WHERE shows.showid = '" + selectedshowid + "'";
+                         "FROM ((shows\n" +
+                         "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
+                         "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
+                         "WHERE shows.showid = '" + selectedshowid + "'";
             ResultSet rs = stm.executeQuery(sql);
 
             while(rs.next()){
                 //title
                 titledisplay.setText(rs.getString("movie.title"));
-
                 theatreiddisplay.setText("Theatre ID: " + String.valueOf(rs.getInt("shows.theatreid")));
-
                 showdatedisplay.setText("Date: " + rs.getString("shows.showdate"));
-
                 showtimedisplay.setText("Time: " + rs.getString("shows.showtime"));
-
                 unitpricedisplay.setText("Unit Price: RM" + rs.getString(String.valueOf("movie.price")));
-
                 movietypedisplay.setText("Type: " + rs.getString("movie.movietype"));   
             }
 
@@ -1237,7 +1209,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         //display chosen seat
         seatsdisplay.setText("Seats: " + displaychosen);      
         movie_sum = numofticket * price_select;
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_bookbuttonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         //DESELECT ALL BUTTONS IF CUSTOMER CHOSE ANOTHER MOVIE
@@ -1245,61 +1217,70 @@ public class CustomerMenu extends javax.swing.JFrame {
             i.button.setSelected(false);
         }
         seatpanel.removeAll();
-        // refresh the panel.
-        DisplayPanel.removeAll();
-        DisplayPanel.add(seatpanel);
-        DisplayPanel.updateUI();
         seatpanel.updateUI();
-        DisplayPanel.revalidate();
+        // refresh the panel.
+//        DisplayPanel.removeAll();
+//        DisplayPanel.add(seatpanel);
+//        DisplayPanel.updateUI();
+//        DisplayPanel.revalidate();
+        displayPanelChange(seatpanel);
         
         //clear and display table (METHOD)
-        displayShows();
+        DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
+        displayShows(tblModel);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchActionPerformed
  
         //clear table
         DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
-        clearShowsTable(tblModel);
-        if(DateChooser.getDate() == null){
-            JOptionPane.showMessageDialog(this, "Please choose date");
-        }
-        else{
+        clearTable(tblModel);
+//        if(DateChooser.getDate() == null){
+//            JOptionPane.showMessageDialog(this, "Please choose date");
+//        }
+//        else{
+        block:{
             try{
                 String movietitle = (String) MovieList.getSelectedItem();
-
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
-                String date = sdf.format(DateChooser.getDate());
-
+                String date = "";
+                if (DateChooser.getDate() == null ){
+                    
+                }else{
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+                    Date tempdate = DateChooser.getDate();
+                    date = sdf.format(tempdate);
+                }
                 String time = (String) TimeList.getSelectedItem();
 
                 Statement stm = db.getConnection().createStatement();
                 String sql = "SELECT shows.theatreid, movie.title, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
-                "FROM ((shows\n" +
-                "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
-                "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n";
-
+                             "FROM ((shows\n" +
+                             "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
+                             "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n";
+                
                 //conditions
                 //REMEMBER TO EDIT THIS
-                if(movietitle.isEmpty() && date.isEmpty() && time.isEmpty()){
-                    JOptionPane.showMessageDialog(this, "Please fill in all the blank(s)");
+                if(movietitle.equals("Select a movie") && date.isEmpty() && time.equals("Select a time")){
+                    //JOptionPane.showMessageDialog(this, "Please fill in all the blank(s)");
+                    displayShows(tblModel);
+                    break block;
                 }
-                else if(!movietitle.isEmpty() && date.isEmpty() && time.isEmpty()){
+                else if(!movietitle.equals("Select a movie") && date.isEmpty() && time.equals("Select a time")){
                     sql = sql + "WHERE title = '" + movietitle + "'";
                 }
-                else if(movietitle.isEmpty() && !date.isEmpty() && time.isEmpty()){
+                else if(movietitle.equals("Select a movie") && !date.isEmpty() && time.equals("Select a time")){
                     sql = sql + "WHERE showdate = '" + date + "'";
                 }
-                else if(movietitle.isEmpty() && date.isEmpty() && !time.isEmpty()){
+                else if(movietitle.equals("Select a movie") && date.isEmpty() && !time.equals("Select a time")){
                     sql = sql + "WHERE showtime = '" + time + "'";
                 }
-                else if(!movietitle.isEmpty() && !date.isEmpty() && time.isEmpty()){
+                else if(!movietitle.equals("Select a movie") && !date.isEmpty() && time.equals("Select a time")){
                     sql = sql + "WHERE title = '" + movietitle + "' and showdate = '" + date + "'";
                 }
-                else if(movietitle.isEmpty() && !date.isEmpty() && !time.isEmpty()){
+                else if(movietitle.equals("Select a movie") && !date.isEmpty() && !time.equals("Select a time")){
                     sql = sql + "WHERE showdate = '" + date + "' and showtime = '" + time + "'";
                 }
-                else if(!movietitle.isEmpty() && date.isEmpty() && !time.isEmpty()){
+                else if(!movietitle.equals("Select a movie") && date.isEmpty() && !time.equals("Select a time")){
                     sql = sql + "WHERE title = '" + movietitle + "' and showtime = '" + time + "'";
                 }
                 else{
@@ -1329,6 +1310,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+//        }
     }//GEN-LAST:event_SearchActionPerformed
 
     private void TimeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimeListActionPerformed
@@ -1341,14 +1323,18 @@ public class CustomerMenu extends javax.swing.JFrame {
 
     private void ShowTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ShowTableMouseClicked
         
-        DisplayPanel.removeAll();
-        DisplayPanel.add(seatpanel);
-        DisplayPanel.updateUI();
+        bookbutton.setEnabled(true);
+        
+//        DisplayPanel.removeAll();
+//        DisplayPanel.add(seatpanel);
+//        DisplayPanel.updateUI();
+        displayPanelChange(seatpanel);
         seatpanel.removeAll();
         seatpanel.updateUI();
 
         DefaultTableModel model = (DefaultTableModel)ShowTable.getModel();
         int selectedRowIndex = ShowTable.getSelectedRow();
+        
         theatreid_select  = model.getValueAt(selectedRowIndex, 0).toString();
         date_select = model.getValueAt(selectedRowIndex, 2).toString();
         time_select = model.getValueAt(selectedRowIndex, 3).toString();
@@ -1543,10 +1529,11 @@ public class CustomerMenu extends javax.swing.JFrame {
                 String displaytotal = String.format("RM%.2f", wholeTotal);
                 totalpricedisplay.setText(displaytotal);
                 
-                DisplayPanel.removeAll();
-                DisplayPanel.add(ConfirmationPanel);
-                DisplayPanel.updateUI();
-                DisplayPanel.revalidate();
+//                DisplayPanel.removeAll();
+//                DisplayPanel.add(ConfirmationPanel);
+//                DisplayPanel.updateUI();
+//                DisplayPanel.revalidate();
+                displayPanelChange(ConfirmationPanel);
                 
                 afterdiscountprice = wholeTotal;
         }
@@ -1556,10 +1543,11 @@ public class CustomerMenu extends javax.swing.JFrame {
             wholeTotal = movie_sum;
             String displaytotal = String.format("RM%.2f",wholeTotal);
             totalpricedisplay.setText(displaytotal);
-            DisplayPanel.removeAll();
-            DisplayPanel.add(ConfirmationPanel);
-            DisplayPanel.updateUI();
-            DisplayPanel.revalidate();
+//            DisplayPanel.removeAll();
+//            DisplayPanel.add(ConfirmationPanel);
+//            DisplayPanel.updateUI();
+//            DisplayPanel.revalidate();
+            displayPanelChange(ConfirmationPanel);
             afterdiscountprice = wholeTotal;
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -1582,24 +1570,28 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_fbsetlistActionPerformed
 
     private void fbunitpriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fbunitpriceActionPerformed
-        
     }//GEN-LAST:event_fbunitpriceActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        DisplayPanel.removeAll();
-        DisplayPanel.add(CardPaymentPanel);
-        DisplayPanel.updateUI();
-        DisplayPanel.revalidate();
+        
+        if(studentcheckbox.isSelected() && (studentemail.getText().equals("") || studentid.getText().equals(""))){
+            JOptionPane.showMessageDialog(this, "Please fill in the blanks");
+        }else{
+            DisplayPanel.removeAll();
+            DisplayPanel.add(CardPaymentPanel);
+            DisplayPanel.updateUI();
+            DisplayPanel.revalidate();
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void PaymentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaymentTypeActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_PaymentTypeActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         
         if(cardnum.getText().equals("") || cardname.getText().equals("")  || expdate.getText().equals("")  || csv.getText().equals("") ){
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
+            
         }
         else{
             try {
@@ -1617,7 +1609,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 for (Seat i : seatlist) {
                     if(i.button.isSelected() == true){
                         Statement stm2 = db.getConnection().createStatement();
-                        String sql2 = "INSERT INTO bookdetail VALUES ('" + bookid + "','" + i.getSeatid() + "');";
+                        String sql2 = "INSERT INTO bookdetail (bookid, seatid) VALUES ('" + bookid + "','" + i.getSeatid() + "');";
                         stm2.executeUpdate(sql2);
                         
                         Statement stm3 = db.getConnection().createStatement();
@@ -1631,7 +1623,17 @@ public class CustomerMenu extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
+        // refresh record table
+        DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
+        displayRecord(tblModel1);
+        
+        seatpanel.removeAll();
+        seatpanel.updateUI();
+
+        displayPanelChange(seatpanel);
+        
         }
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityActionPerformed
@@ -1704,10 +1706,9 @@ public class CustomerMenu extends javax.swing.JFrame {
         pfphone.setText(cus.getPhone());
     }
     
-    public void displayShows(){
+    public void displayShows(DefaultTableModel tblModel){
         //clear table
-        DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
-        clearShowsTable(tblModel);
+        clearTable(tblModel);
         try{
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT shows.theatreid, movie.title, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
@@ -1731,12 +1732,53 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
     }
     
-    public void clearShowsTable(DefaultTableModel tblModel){
+    public void clearTable(DefaultTableModel tblModel){
         int rowCount = tblModel.getRowCount();
         //Remove rows one by one from the end of the table
         for (int i = rowCount - 1; i >= 0; i--) {
             tblModel.removeRow(i);
         }
+    }
+    
+    public void displayRecord(DefaultTableModel tblModel){
+        
+        clearTable(tblModel);
+        
+        try{
+            Statement stm1 = db.getConnection().createStatement();
+            String sql1 = "SELECT *\n" +
+                          "FROM ((((((bookdetail\n" +
+                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+                          "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+                          "WHERE customer.ic = '" + cus.getIc() +"'\n" +
+                          "ORDER BY bookdetail.bookid;";
+            ResultSet rs1 = stm1.executeQuery(sql1);
+            while(rs1.next()){
+                String bookid = String.valueOf(rs1.getInt("bookid"));
+                String title = rs1.getString("title");
+                String theatre = String.valueOf(rs1.getInt("theatreid"));
+                String seatnum = rs1.getString("seatnum");
+                String sdate = rs1.getString("showdate");
+                String stime = rs1.getString("showtime");
+                String price = String.valueOf(rs1.getInt("totalprice"));
+                String tbData[] = {bookid, title, theatre, seatnum, sdate, stime, price};
+//                DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
+                tblModel.addRow(tbData);
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void displayPanelChange(JPanel panel){
+        DisplayPanel.removeAll();
+        DisplayPanel.add(panel);
+        DisplayPanel.updateUI();
+        DisplayPanel.revalidate();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CardPaymentPanel;
@@ -1751,6 +1793,7 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JButton Search;
     private javax.swing.JTable ShowTable;
     private javax.swing.JComboBox<String> TimeList;
+    private javax.swing.JButton bookbutton;
     private javax.swing.JTextField cardname;
     private javax.swing.JTextField cardnum;
     private javax.swing.JTextField csv;
@@ -1769,7 +1812,6 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel fbsetdisplay;
     private javax.swing.JComboBox<String> fbsetlist;
     private javax.swing.JTextField fbunitprice;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
