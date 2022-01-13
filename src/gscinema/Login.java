@@ -386,7 +386,7 @@ public class Login extends javax.swing.JFrame {
 
         CustomerRegistrationTitle1.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         CustomerRegistrationTitle1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        CustomerRegistrationTitle1.setText("STAFF REGISTERATION");
+        CustomerRegistrationTitle1.setText("STAFF REGISTRATION");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);

@@ -142,7 +142,7 @@ public class StaffMenu extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        fnbtable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -212,12 +212,6 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jLabel2.setText("Movie Title:");
 
-        title1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                title1ActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText("Release Date:");
 
         releasedate1.setDateFormatString("dd-MM-yyyy");
@@ -243,20 +237,9 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jLabel8.setText("Price:");
 
-        price1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                price1ActionPerformed(evt);
-            }
-        });
-
         jLabel9.setText("Type:");
 
         type1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Premium" }));
-        type1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                type1ActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Add Movie");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -403,29 +386,11 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jLabel12.setText("Theatre:");
 
-        movie3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                movie3ActionPerformed(evt);
-            }
-        });
-
-        theatre3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                theatre3ActionPerformed(evt);
-            }
-        });
-
         sdate3.setDateFormatString("dd-MM-yyyy");
 
         jLabel14.setText("Show Date:");
 
         jLabel15.setText("Show Time:");
-
-        stime3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stime3ActionPerformed(evt);
-            }
-        });
 
         AddShowButton.setText("Add Show");
         AddShowButton.addActionListener(new java.awt.event.ActionListener() {
@@ -503,7 +468,7 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Edit Shows", jPanel4);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        fnbtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -514,7 +479,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane7.setViewportView(jTable1);
+        jScrollPane7.setViewportView(fnbtable);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -678,15 +643,6 @@ public class StaffMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AddShowButtonActionPerformed
 
-    private void stime3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stime3ActionPerformed
-    }//GEN-LAST:event_stime3ActionPerformed
-
-    private void theatre3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_theatre3ActionPerformed
-    }//GEN-LAST:event_theatre3ActionPerformed
-
-    private void movie3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movie3ActionPerformed
-    }//GEN-LAST:event_movie3ActionPerformed
-
     private void ShowTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ShowTableMouseClicked
         DefaultTableModel model = (DefaultTableModel)ShowTable.getModel();
         int selectedRowIndex = ShowTable.getSelectedRow();
@@ -730,7 +686,6 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
         DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
         clearTable(tblModel);
 
@@ -782,15 +737,6 @@ public class StaffMenu extends javax.swing.JFrame {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void type1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_type1ActionPerformed
-    }//GEN-LAST:event_type1ActionPerformed
-
-    private void price1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_price1ActionPerformed
-    }//GEN-LAST:event_price1ActionPerformed
-
-    private void title1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_title1ActionPerformed
-    }//GEN-LAST:event_title1ActionPerformed
 
     private void MovieTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieTableMouseClicked
         //Store movie id to a temporary variable
@@ -1023,6 +969,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JTable ShowTable;
     private javax.swing.JTextArea casts1;
     private javax.swing.JTextField duration1;
+    private javax.swing.JTable fnbtable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1050,7 +997,6 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> movie3;
     private javax.swing.JTextField price1;
     private com.toedter.calendar.JDateChooser releasedate1;

@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.print.PrinterException;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.*;
@@ -26,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.table.DefaultTableModel;
 
@@ -42,9 +44,11 @@ public class CustomerMenu extends javax.swing.JFrame {
     private int price_select;
     private int foodid;
     private int foodprice;
+    private int foodquantity;
     private int movie_sum;
     private int selectedshowid;
     private int numofticket;
+    private double unitprice;
     private double wholeTotal;
     private double afterdiscountprice;
     private ArrayList<Seat> seatlist = new ArrayList<>();
@@ -135,6 +139,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         
         displayProfile(cus);
+        printReceipt2.setEnabled(false);
         
 //        ImageIcon image = new ImageIcon(getClass().getResource("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\Payment_Successful_.png"));
 //        Image scaledImage = image.getScaledInstance(qrcode.getWidth(),qrcode.getHeight(),Image.SCALE_SMOOTH);
@@ -242,10 +247,18 @@ public class CustomerMenu extends javax.swing.JFrame {
         EwalletPanel = new javax.swing.JPanel();
         CancelPaymentButton2 = new javax.swing.JButton();
         qrcode = new javax.swing.JLabel();
+        ReceiptPanel = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        ReceiptText = new javax.swing.JTextArea();
+        printReceipt = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         bookbutton = new javax.swing.JButton();
         BookedTicketsPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tickettable = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        ReceiptText2 = new javax.swing.JTextArea();
+        printReceipt2 = new javax.swing.JButton();
         ProfilePanel = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -256,11 +269,11 @@ public class CustomerMenu extends javax.swing.JFrame {
         pfemail = new javax.swing.JTextField();
         pfphone = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        currentpassword = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        newpassword = new javax.swing.JTextField();
+        confirmpassword = new javax.swing.JTextField();
         updateProfile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -360,18 +373,8 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
 
         MovieList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select a movie" }));
-        MovieList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MovieListActionPerformed(evt);
-            }
-        });
 
         TimeList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select a time" }));
-        TimeList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TimeListActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Movies:");
 
@@ -477,7 +480,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         );
         seatpanelLayout.setVerticalGroup(
             seatpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
+            .addGap(0, 348, Short.MAX_VALUE)
         );
 
         DisplayPanel.add(seatpanel, "card2");
@@ -489,6 +492,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setText("Set:");
 
+        fbsetlist.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
         fbsetlist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fbsetlistActionPerformed(evt);
@@ -509,12 +513,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel20.setText("Quantity:");
 
-        quantity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quantityActionPerformed(evt);
-            }
-        });
-
         ProceedConfirmationButton.setText("Proceed to Confirmation");
         ProceedConfirmationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -526,11 +524,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         jLabel26.setText("Unit Price:");
 
         fbunitprice.setEditable(false);
-        fbunitprice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fbunitpriceActionPerformed(evt);
-            }
-        });
 
         BackToSeatsButton.setText("Back To Seats");
         BackToSeatsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -580,7 +573,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(FBPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(FBPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                         .addGap(29, 29, 29))
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
@@ -589,7 +582,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addComponent(fbunitprice, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(FBPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
                     .addComponent(quantity))
                 .addGap(18, 18, 18)
                 .addComponent(ProceedConfirmationButton)
@@ -648,11 +641,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         });
 
         PaymentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Debit/Credit", "e-Wallet" }));
-        PaymentType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PaymentTypeActionPerformed(evt);
-            }
-        });
 
         studentcheckbox.setText("Are you a student?");
         studentcheckbox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -731,7 +719,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(seatsdisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fbsetdisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fbsetdisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fbquantitydisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -750,7 +738,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addComponent(ProceedPaymentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backtofnbbutton)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         DisplayPanel.add(ConfirmationPanel, "card3");
@@ -770,12 +758,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         jLabel24.setText("Expiry Date:");
 
         jLabel25.setText("CSV Code:");
-
-        expdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                expdateActionPerformed(evt);
-            }
-        });
 
         PayButton.setText("Pay");
         PayButton.addActionListener(new java.awt.event.ActionListener() {
@@ -847,7 +829,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addComponent(PayButton)
                 .addGap(18, 18, 18)
                 .addComponent(CancelPaymentButton)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         DisplayPanel.add(CardPaymentPanel, "card5");
@@ -877,13 +859,60 @@ public class CustomerMenu extends javax.swing.JFrame {
             EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EwalletPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(qrcode, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addComponent(qrcode, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(CancelPaymentButton2)
                 .addGap(34, 34, 34))
         );
 
         DisplayPanel.add(EwalletPanel, "card6");
+
+        ReceiptText.setEditable(false);
+        ReceiptText.setColumns(20);
+        ReceiptText.setRows(5);
+        jScrollPane6.setViewportView(ReceiptText);
+
+        printReceipt.setText("Print Receipt");
+        printReceipt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printReceiptActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Quit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ReceiptPanelLayout = new javax.swing.GroupLayout(ReceiptPanel);
+        ReceiptPanel.setLayout(ReceiptPanelLayout);
+        ReceiptPanelLayout.setHorizontalGroup(
+            ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ReceiptPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                    .addGroup(ReceiptPanelLayout.createSequentialGroup()
+                        .addComponent(printReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        ReceiptPanelLayout.setVerticalGroup(
+            ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ReceiptPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(printReceipt))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        DisplayPanel.add(ReceiptPanel, "card7");
 
         bookbutton.setText("Book");
         bookbutton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -901,7 +930,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(MoviePanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(displayprice, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MoviePanelLayout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -941,13 +971,10 @@ public class CustomerMenu extends javax.swing.JFrame {
                                 .addGap(253, 253, 253)
                                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel14))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, MoviePanelLayout.createSequentialGroup()
                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -984,9 +1011,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addComponent(DateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(MoviePanelLayout.createSequentialGroup()
                         .addGroup(MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1034,7 +1061,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addGroup(MoviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
 
         MainTabbedPanel.addTab("Display Shows", MoviePanel);
@@ -1056,7 +1083,24 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         });
         tickettable.getTableHeader().setReorderingAllowed(false);
+        tickettable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tickettableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tickettable);
+
+        ReceiptText2.setEditable(false);
+        ReceiptText2.setColumns(20);
+        ReceiptText2.setRows(5);
+        jScrollPane7.setViewportView(ReceiptText2);
+
+        printReceipt2.setText("Print Receipt");
+        printReceipt2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printReceipt2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout BookedTicketsPanelLayout = new javax.swing.GroupLayout(BookedTicketsPanel);
         BookedTicketsPanel.setLayout(BookedTicketsPanelLayout);
@@ -1064,14 +1108,23 @@ public class CustomerMenu extends javax.swing.JFrame {
             BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BookedTicketsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1499, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 976, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                    .addComponent(printReceipt2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         BookedTicketsPanelLayout.setVerticalGroup(
             BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BookedTicketsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(BookedTicketsPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(printReceipt2)))
                 .addContainerGap(380, Short.MAX_VALUE))
         );
 
@@ -1085,11 +1138,9 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         jLabel30.setText("Phone Number:");
 
-        pfic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pficActionPerformed(evt);
-            }
-        });
+        pfic.setEditable(false);
+
+        pfname.setEditable(false);
 
         jLabel31.setText("Current Password:");
 
@@ -1098,6 +1149,11 @@ public class CustomerMenu extends javax.swing.JFrame {
         jLabel33.setText("Confirm Password:");
 
         updateProfile.setText("Update");
+        updateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateProfileActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ProfilePanelLayout = new javax.swing.GroupLayout(ProfilePanel);
         ProfilePanel.setLayout(ProfilePanelLayout);
@@ -1122,9 +1178,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                             .addComponent(pfname, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                             .addComponent(pfemail, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                             .addComponent(pfphone, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3))))
+                            .addComponent(currentpassword)
+                            .addComponent(newpassword)
+                            .addComponent(confirmpassword))))
                 .addContainerGap(1169, Short.MAX_VALUE))
         );
         ProfilePanelLayout.setVerticalGroup(
@@ -1149,15 +1205,15 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(ProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(currentpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(ProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel32)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(newpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(ProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(confirmpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(updateProfile)
                 .addContainerGap(417, Short.MAX_VALUE))
@@ -1224,7 +1280,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         try{
             Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT movie.title, shows.theatreid, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
+            String sql = "SELECT *\n" +
                          "FROM ((shows\n" +
                          "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
                          "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
@@ -1238,6 +1294,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 showdatedisplay.setText("Date: " + rs.getString("shows.showdate"));
                 showtimedisplay.setText("Time: " + rs.getString("shows.showtime"));
                 unitpricedisplay.setText("Unit Price: RM" + rs.getString(String.valueOf("movie.price")));
+                unitprice = (double) rs.getDouble("movie.price");
                 movietypedisplay.setText("Type: " + rs.getString("movie.movietype"));   
             }
 
@@ -1335,12 +1392,6 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_SearchButtonActionPerformed
-
-    private void TimeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimeListActionPerformed
-    }//GEN-LAST:event_TimeListActionPerformed
-
-    private void MovieListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovieListActionPerformed
-    }//GEN-LAST:event_MovieListActionPerformed
 
     private void ShowTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ShowTableMouseClicked
         
@@ -1514,44 +1565,17 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ShowTableMouseClicked
 
-    private void expdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expdateActionPerformed
-    }//GEN-LAST:event_expdateActionPerformed
-
     private void ProceedConfirmationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProceedConfirmationButtonActionPerformed
         String selectedfood = (String) fbsetlist.getSelectedItem();
         
-        if(!selectedfood.equals("") && quantity.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Please Insert Quantity"); 
-        }else if(selectedfood.equals("") && !quantity.getText().equals("")){
-            JOptionPane.showMessageDialog(this, "Please Select a menu"); 
-        }
-        else if(!selectedfood.equals("") && !quantity.getText().equals("")){
-            
-            try {
-                Statement stm = db.getConnection().createStatement();
-                String sql = "SELECT * FROM food WHERE fbname = '" + selectedfood + "'";
-                ResultSet rs = stm.executeQuery(sql);
-                
-                while(rs.next()){
-                    foodid = rs.getInt("fbid");
-                }
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        if(!quantity.getText().equals("")){
+            if(Integer.parseInt(quantity.getText()) <= 0 && !quantity.getText().equals("")){
+                JOptionPane.showMessageDialog(this, "Invalid quantity value");
+                return;
             }
-                int qt = Integer.parseInt(quantity.getText());
-                foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * qt;
-                fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
-                fbquantitydisplay.setText("F&B Quantity: " + qt);
-                wholeTotal = (foodprice + movie_sum);
-                String displaytotal = String.format("RM%.2f", wholeTotal);
-                totalpricedisplay.setText(displaytotal);
-
-                displayPanelChange(ConfirmationPanel);
-                
-                afterdiscountprice = wholeTotal;
         }
-        else{
+        
+        if (selectedfood.equals("-") && quantity.getText().equals("")){
             fbsetdisplay.setText("No Beverages Selected");
             fbquantitydisplay.setText("No Quantity");
             wholeTotal = movie_sum;
@@ -1560,6 +1584,36 @@ public class CustomerMenu extends javax.swing.JFrame {
 
             displayPanelChange(ConfirmationPanel);
             afterdiscountprice = wholeTotal;
+        }
+        else if(!selectedfood.equals("-") && (quantity.getText().equals("") || quantity.getText().equals("0"))){
+            JOptionPane.showMessageDialog(this, "Please Insert Quantity"); 
+        }
+        else if(selectedfood.equals("-") && !quantity.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "Please Select a menu"); 
+        }
+        else if(!selectedfood.equals("-") && !quantity.getText().equals("")){
+            try {
+                Statement stm = db.getConnection().createStatement();
+                String sql = "SELECT * FROM food WHERE fbname = '" + selectedfood + "'";
+                ResultSet rs = stm.executeQuery(sql);
+                
+                while(rs.next()){
+                    foodid = rs.getInt("fbid");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                foodquantity = Integer.parseInt(quantity.getText());
+                foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * foodquantity;
+                fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
+                fbquantitydisplay.setText("F&B Quantity: " + foodquantity);
+                wholeTotal = (foodprice + movie_sum);
+                String displaytotal = String.format("RM%.2f", wholeTotal);
+                totalpricedisplay.setText(displaytotal);
+
+                displayPanelChange(ConfirmationPanel);
+                
+                afterdiscountprice = wholeTotal;
         }
     }//GEN-LAST:event_ProceedConfirmationButtonActionPerformed
 
@@ -1580,9 +1634,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_fbsetlistActionPerformed
 
-    private void fbunitpriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fbunitpriceActionPerformed
-    }//GEN-LAST:event_fbunitpriceActionPerformed
-
     private void ProceedPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProceedPaymentButtonActionPerformed
         
         if(studentcheckbox.isSelected() && (studentemail.getText().equals("") || studentid.getText().equals(""))){
@@ -1597,32 +1648,27 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ProceedPaymentButtonActionPerformed
 
-    private void PaymentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PaymentTypeActionPerformed
-    }//GEN-LAST:event_PaymentTypeActionPerformed
-
     private void PayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PayButtonActionPerformed
-        
+        String bookid = "";
         if(cardnum.getText().equals("") || cardname.getText().equals("")  || expdate.getText().equals("")  || csv.getText().equals("") ){
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
-            
         }
         else{
             try {
-                
                 //RETURN_GENERATED_ID
-                String sql = "INSERT INTO booking (ic, fbid, totalprice) VALUES ('" + cus.getIc() + "', '" + foodid +"', '" + afterdiscountprice + "');";
+                String sql = "INSERT INTO booking (ic, fbid, fbquantity, totalprice) " +
+                             "VALUES ('" + cus.getIc() + "', '" + foodid +"', '" + foodquantity + "', '" + afterdiscountprice + "');";
                 PreparedStatement ps = db.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 ps.execute();
                 ResultSet rs = ps.getGeneratedKeys();
-                int bookid = 0;
                 while(rs.next()){
-                    bookid = rs.getInt(1);
+                    bookid = String.valueOf(rs.getInt(1));
                 }
-                
                 for (Seat i : seatlist) {
                     if(i.button.isSelected() == true){
                         Statement stm2 = db.getConnection().createStatement();
-                        String sql2 = "INSERT INTO bookdetail (bookid, seatid) VALUES ('" + bookid + "','" + i.getSeatid() + "');";
+                        String sql2 = "INSERT INTO bookdetail (bookid, seatid, unitprice) " + 
+                                      "VALUES ('" + bookid + "','" + i.getSeatid() + "', '" + unitprice + "');";
                         stm2.executeUpdate(sql2);
                         
                         Statement stm3 = db.getConnection().createStatement();
@@ -1642,16 +1688,12 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         seatpanel.removeAll();
         seatpanel.updateUI();
-
-        displayPanelChange(seatpanel);
+        
+        displayPanelChange(ReceiptPanel);
+        
+        viewReceipt(ReceiptText, bookid);
         }
     }//GEN-LAST:event_PayButtonActionPerformed
-
-    private void quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityActionPerformed
-    }//GEN-LAST:event_quantityActionPerformed
-
-    private void pficActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pficActionPerformed
-    }//GEN-LAST:event_pficActionPerformed
 
     private void studentcheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentcheckboxActionPerformed
         // TODO add your handling code here:
@@ -1693,6 +1735,99 @@ public class CustomerMenu extends javax.swing.JFrame {
             backToDefaultView();
         } else {}
     }//GEN-LAST:event_CancelPaymentButton2ActionPerformed
+
+    private void tickettableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tickettableMouseClicked
+        DefaultTableModel model = (DefaultTableModel)tickettable.getModel();
+        int selectedRowIndex = tickettable.getSelectedRow();
+        String bookid = (String)model.getValueAt(selectedRowIndex, 0);
+        viewReceipt(ReceiptText2, bookid);
+        
+        printReceipt2.setEnabled(true);
+    }//GEN-LAST:event_tickettableMouseClicked
+
+    private void printReceipt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReceipt2ActionPerformed
+        try {
+            ReceiptText2.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printReceipt2ActionPerformed
+
+    private void printReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printReceiptActionPerformed
+        try {
+            ReceiptText.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printReceiptActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        backToDefaultView();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void updateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProfileActionPerformed
+        
+        try{
+            //update email
+            if(!pfemail.getText().isEmpty() && !cus.getEmail().equals(pfemail.getText())){
+                cus.setEmail(pfemail.getText());
+                Statement stm = db.getConnection().createStatement();
+                String sql = "UPDATE customer\n" +
+                             "SET email= '" + cus.getEmail() + "'\n" +
+                             "WHERE ic = '" + cus.getIc() + "';";
+                stm.executeUpdate(sql);
+                JOptionPane.showMessageDialog(this, "Email update successful");
+                System.out.println(cus.getEmail());
+            }
+            //update phone
+            if(!pfphone.getText().isEmpty() && !cus.getPhone().equals(pfphone.getText())){
+                cus.setPhone(pfphone.getText());
+                Statement stm2 = db.getConnection().createStatement();
+                String sql2 = "UPDATE customer\n" +
+                              "SET mobile_num = '" + cus.getPhone()+ "'\n" +
+                              "WHERE ic = '" + cus.getIc() + "';";
+                stm2.executeUpdate(sql2);
+                JOptionPane.showMessageDialog(this, "Phone number update successful");
+                System.out.println(cus.getPhone());
+            }
+            //update password
+            if(!currentpassword.getText().isEmpty() && !newpassword.getText().isEmpty() && !confirmpassword.getText().isEmpty()){
+                if(!currentpassword.getText().equals(cus.getPassword())){
+                    JOptionPane.showMessageDialog(this, "Wrong current password");
+                }
+                else if(!newpassword.getText().equals(confirmpassword.getText())){
+                    JOptionPane.showMessageDialog(this, "New password does not match");
+                }
+                else if(currentpassword.getText().equals(newpassword.getText())){
+                    JOptionPane.showMessageDialog(this, "New password must not be the same as current password");
+                }
+                else{
+                    cus.setPassword(newpassword.getText());
+                    Statement stm3 = db.getConnection().createStatement();
+                    String sql3 = "UPDATE customer\n" +
+                                  "SET cus_password = '" + cus.getPassword()+ "'\n" +
+                                  "WHERE ic = '" + cus.getIc() + "';";
+                    stm3.executeUpdate(sql3);
+                    JOptionPane.showMessageDialog(this, "Update successful");
+                    System.out.println(cus.getPassword());
+                }
+            }
+            else if(!currentpassword.getText().isEmpty() && (newpassword.getText().isEmpty() || confirmpassword.getText().isEmpty())){
+                JOptionPane.showMessageDialog(this, "Please fill in your new password and confirm your password");
+            }
+            else if(!newpassword.getText().isEmpty() && (currentpassword.getText().isEmpty() || confirmpassword.getText().isEmpty())){
+                JOptionPane.showMessageDialog(this, "Please fill in your current password and confirm your password");
+            }
+            else if(!confirmpassword.getText().isEmpty() && (currentpassword.getText().isEmpty() || newpassword.getText().isEmpty())){
+                JOptionPane.showMessageDialog(this, "Please fill in your current password and your new password");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //refresh profile
+        displayProfile(cus);
+    }//GEN-LAST:event_updateProfileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1741,19 +1876,19 @@ public class CustomerMenu extends javax.swing.JFrame {
         clearTable(tblModel);
         try{
             Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT shows.theatreid, movie.title, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
+            String sql = "SELECT *\n" +
                          "FROM ((shows\n" +
                          "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
                          "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
                          "ORDER BY shows.showdate ASC, shows.showtime ASC;";
             ResultSet rs = stm.executeQuery(sql);
             while(rs.next()){
-                String theatre = String.valueOf(rs.getInt("theatreid"));
-                String title = rs.getString("title");
-                String sdate = rs.getString("showdate");
-                String stime = rs.getString("showtime");
-                String price = String.valueOf(rs.getInt("price"));
-                String type = rs.getString("movietype");
+                String theatre = String.valueOf(rs.getInt("shows.theatreid"));
+                String title = rs.getString("movie.title");
+                String sdate = rs.getString("shows.showdate");
+                String stime = rs.getString("shows.showtime");
+                String price = String.valueOf(rs.getInt("movie.price"));
+                String type = rs.getString("movie.movietype");
                 String tbData[] = {theatre, title, sdate, stime, price, type};
                 tblModel.addRow(tbData);
             }
@@ -1772,7 +1907,6 @@ public class CustomerMenu extends javax.swing.JFrame {
     
     private void displayRecord(DefaultTableModel tblModel){
         clearTable(tblModel);
-        
         try{
             Statement stm1 = db.getConnection().createStatement();
             String sql1 = "SELECT *\n" +
@@ -1793,7 +1927,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 String seatnum = rs1.getString("seatnum");
                 String sdate = rs1.getString("showdate");
                 String stime = rs1.getString("showtime");
-                String price = String.valueOf(rs1.getInt("totalprice"));
+                String price = String.valueOf(rs1.getInt("unitprice"));
                 String tbData[] = {bookid, title, theatre, seatnum, sdate, stime, price};
                 tblModel.addRow(tbData);
             } 
@@ -1816,9 +1950,80 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         seatpanel.removeAll();
         seatpanel.updateUI();
+        
+        fbsetlist.setSelectedIndex(0);
+        quantity.setText("");
+        studentcheckbox.setSelected(false);
+        studentemail.setText("");
+        studentid.setText("");
+        cardnum.setText("");
+        cardname.setText("");
+        expdate.setText("");
+        csv.setText("");
+        
         // refresh the panel.
         displayPanelChange(seatpanel);
     }
+    
+    private void viewReceipt(JTextArea textArea, String passedbookid){
+       Date today = new Date();
+       String bookid = "";
+       String movietitle = "";
+       String theatre = "";
+       String showdate = "";
+       String showtime = "";
+       StringBuilder seat = new StringBuilder();
+       String fnbname = "";
+       String fnbquantity = "";
+       double totalprice = 0;
+       
+       try{
+           Statement stm = db.getConnection().createStatement();
+           String sql ="SELECT *\n" +
+                       "FROM ((((((bookdetail\n" +
+                       "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
+                       "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
+                       "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                       "INNER JOIN customer ON booking.ic = customer.ic)\n" +
+                       "INNER JOIN shows ON seat.showid = shows.showid)\n" +
+                       "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
+                       "WHERE customer.ic = '" + cus.getIc() +"' AND booking.bookid = '" + passedbookid + "'\n" +
+                       "ORDER BY bookdetail.bookid;";
+           ResultSet rs = stm.executeQuery(sql);
+           while(rs.next()){
+               bookid = String.valueOf(rs.getInt("bookdetail.bookid"));
+               movietitle = rs.getString("movie.title");
+               theatre = String.valueOf(rs.getInt("shows.theatreid"));
+               showdate = rs.getString("shows.showdate");
+               showtime = rs.getString("shows.showtime");
+               seat.append(rs.getString("seat.seatnum")).append(" ");
+               fnbname = rs.getString("food.fbname");
+               fnbquantity = String.valueOf(rs.getInt("booking.fbquantity"));
+               totalprice = rs.getDouble("booking.totalprice");
+           }
+       } catch (SQLException ex) {
+            Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+       }
+       String text = "GSCINEMA\n" +
+                     "=========================================\n" +
+                     "Customer Name: " + cus.getName() +"\n" +
+                     "=========================================\n" +
+                     "Date: " + today + "\n" +
+                     "Book ID: " + bookid + "\n" +
+                     "=========================================\n" +
+                     "Movie Title: " + movietitle + "\n" +
+                     "Theatre: " + theatre + "\n" +
+                     "Show Date: " + showdate + "\n" +
+                     "Show Time: " + showtime + "\n" +
+                     "Seat(s): " + seat + "\n" +
+                     "=========================================\n" +
+                     "Food and Beverages: " + fnbname + "\n" +
+                     "F&B Quantity: " + fnbquantity + "\n" +
+                     "=========================================\n" +
+                     "TOTAL PRICE: " + String.format("RM%.2f", totalprice) + "\n";
+       textArea.setText(text);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToSeatsButton;
     private javax.swing.JPanel BookedTicketsPanel;
@@ -1841,6 +2046,9 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JButton ProceedConfirmationButton;
     private javax.swing.JButton ProceedPaymentButton;
     private javax.swing.JPanel ProfilePanel;
+    private javax.swing.JPanel ReceiptPanel;
+    private javax.swing.JTextArea ReceiptText;
+    private javax.swing.JTextArea ReceiptText2;
     private javax.swing.JButton SearchButton;
     private javax.swing.JTable ShowTable;
     private javax.swing.JComboBox<String> TimeList;
@@ -1848,7 +2056,9 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JButton bookbutton;
     private javax.swing.JTextField cardname;
     private javax.swing.JTextField cardnum;
+    private javax.swing.JTextField confirmpassword;
     private javax.swing.JTextField csv;
+    private javax.swing.JTextField currentpassword;
     private javax.swing.JTextArea displaycasts;
     private javax.swing.JLabel displaydate;
     private javax.swing.JLabel displayduration;
@@ -1864,6 +2074,7 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel fbsetdisplay;
     private javax.swing.JComboBox<String> fbsetlist;
     private javax.swing.JTextField fbunitprice;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1906,14 +2117,16 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JLabel movietypedisplay;
+    private javax.swing.JTextField newpassword;
     private javax.swing.JTextField pfemail;
     private javax.swing.JTextField pfic;
     private javax.swing.JTextField pfname;
     private javax.swing.JTextField pfphone;
+    private javax.swing.JButton printReceipt;
+    private javax.swing.JButton printReceipt2;
     private javax.swing.JLabel qrcode;
     private javax.swing.JTextField quantity;
     private javax.swing.JPanel seatpanel;
