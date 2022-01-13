@@ -27,6 +27,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private Database db;
     private String movieid_Remove;
     private String showid_Remove;
+    private String foodid_Remove;
     /**
      * Creates new form StaffMenu
      * @param stf
@@ -88,8 +89,11 @@ public class StaffMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //food and beverages table
+        DefaultTableModel tblModel3 = (DefaultTableModel)fnbtable.getModel();
+        refreshMenu(tblModel3);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,6 +147,15 @@ public class StaffMenu extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         fnbtable = new javax.swing.JTable();
+        deletemenu = new javax.swing.JToggleButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        menuName = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        menuDescription = new javax.swing.JTextArea();
+        menuPrice = new javax.swing.JTextField();
+        addMenuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -470,16 +483,51 @@ public class StaffMenu extends javax.swing.JFrame {
 
         fnbtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Food ID", "Name", "Description", "Price (RM)"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        fnbtable.getTableHeader().setReorderingAllowed(false);
+        fnbtable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fnbtableMouseClicked(evt);
+            }
+        });
         jScrollPane7.setViewportView(fnbtable);
+
+        deletemenu.setText("Delete Selected Menu");
+        deletemenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deletemenuActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Name:");
+
+        jLabel3.setText("Description:");
+
+        jLabel10.setText("Price:");
+
+        menuDescription.setColumns(20);
+        menuDescription.setRows(5);
+        jScrollPane4.setViewportView(menuDescription);
+
+        addMenuButton.setText("Add Menu");
+        addMenuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMenuButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -487,15 +535,52 @@ public class StaffMenu extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(840, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
+                    .addComponent(deletemenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(menuName)
+                            .addComponent(jScrollPane4)
+                            .addComponent(menuPrice))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
+                        .addComponent(addMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(153, 153, 153))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deletemenu))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(menuName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(menuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(addMenuButton)))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Food and Beverages", jPanel5);
@@ -745,6 +830,40 @@ public class StaffMenu extends javax.swing.JFrame {
         movieid_Remove = model.getValueAt(selectedRowIndex, 0).toString();
     }//GEN-LAST:event_MovieTableMouseClicked
 
+    private void fnbtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fnbtableMouseClicked
+        DefaultTableModel model = (DefaultTableModel)fnbtable.getModel();
+        int selectedRowIndex = fnbtable.getSelectedRow();
+        foodid_Remove = model.getValueAt(selectedRowIndex, 0).toString();
+    }//GEN-LAST:event_fnbtableMouseClicked
+
+    private void deletemenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletemenuActionPerformed
+        DefaultTableModel tblModel3 = (DefaultTableModel)fnbtable.getModel();
+        deleteMenu(foodid_Remove);
+        refreshMenu(tblModel3);
+    }//GEN-LAST:event_deletemenuActionPerformed
+
+    private void addMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMenuButtonActionPerformed
+        DefaultTableModel tblModel3 = (DefaultTableModel)fnbtable.getModel();
+        try{
+            String menuname = menuName.getText();
+            String menudescription = menuDescription.getText();
+            String menuprice = menuPrice.getText();
+            
+            Statement stm = db.getConnection().createStatement();
+            String sql = "INSERT INTO food (fbname, description, price) VALUES ('" + menuname + "', '" + menudescription + "', '" + menuprice + "')";
+            stm.executeUpdate(sql);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        refreshMenu(tblModel3);
+        
+        menuName.setText("");
+        menuDescription.setText("");
+        menuPrice.setText("");
+    }//GEN-LAST:event_addMenuButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -961,13 +1080,47 @@ public class StaffMenu extends javax.swing.JFrame {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void refreshMenu(DefaultTableModel tblModel){
+        clearTable(tblModel);
+        try{
+            Statement stm = db.getConnection().createStatement();
+            String sql = "SELECT * FROM food;";
+            ResultSet rs = stm.executeQuery(sql);
+            
+            while(rs.next()){
+                
+                String fbid = String.valueOf(rs.getInt("fbid"));
+                String name = rs.getString("fbname");
+                String description = rs.getString("description");
+                String price = String.valueOf(rs.getString("price"));
+                String tbData[] = {fbid, name, description, price};
+                tblModel.addRow(tbData);
+            }
+        }   catch (SQLException ex) {
+            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void deleteMenu(String foodid){
+        try{
+            //select menu from table
+            Statement stm = db.getConnection().createStatement();
+            String sql = "DELETE FROM food WHERE fbid = '" + foodid + "'";
+            stm.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddShowButton;
     private javax.swing.JLabel GCStitle;
     private javax.swing.JTable MovieTable;
     private javax.swing.JTable ShowTable;
+    private javax.swing.JButton addMenuButton;
     private javax.swing.JTextArea casts1;
+    private javax.swing.JToggleButton deletemenu;
     private javax.swing.JTextField duration1;
     private javax.swing.JTable fnbtable;
     private javax.swing.JButton jButton1;
@@ -976,11 +1129,14 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -994,9 +1150,13 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea menuDescription;
+    private javax.swing.JTextField menuName;
+    private javax.swing.JTextField menuPrice;
     private javax.swing.JComboBox<String> movie3;
     private javax.swing.JTextField price1;
     private com.toedter.calendar.JDateChooser releasedate1;
