@@ -16,6 +16,7 @@ public class Seat {
     private boolean isBooked;
     private int showid;
     JToggleButton button;
+    
     public Seat(int seatid, String num, boolean isBooked, int showid, JToggleButton button){
         this.seatid = seatid;
         this.num = num;

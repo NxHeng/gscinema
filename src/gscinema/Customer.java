@@ -24,7 +24,23 @@ public class Customer {
         this.password = password;
         this.phone = phone;
     }
-
+    
+    public String getIc() {
+        return ic;
+    }
+    
+    public void setIc(String ic) {
+        this.ic = ic;
+    }   
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public String getEmail() {
         return email;
     }
@@ -47,22 +63,6 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-    
-    public String getIc() {
-        return ic;
-    }
-    
-    public void setIc(String ic) {
-        this.ic = ic;
-    }   
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
     }
     
 }

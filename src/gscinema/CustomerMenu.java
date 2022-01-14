@@ -80,7 +80,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
         displayRecord(tblModel1);
         
-        //MovieList
+        //MovieList - combo box
         try{
             ArrayList<String> movieItems = new ArrayList<>();
             Statement stm = db.getConnection().createStatement();
@@ -95,6 +95,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         //TimeList
         try{
             ArrayList<String> timeList = new ArrayList<>();
@@ -114,9 +115,10 @@ public class CustomerMenu extends javax.swing.JFrame {
         //Default Date
         try {
             Date temp = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             String tempdate = sdf.format(temp);
-            Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
+            Date current = new SimpleDateFormat("dd-MM-yyyy").parse(tempdate);
+            
             DateChooser.setDate(current);
         } catch (ParseException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1144,6 +1146,12 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         jLabel31.setText("Current Password:");
 
+        currentpassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                currentpasswordActionPerformed(evt);
+            }
+        });
+
         jLabel32.setText("New Password:");
 
         jLabel33.setText("Confirm Password:");
@@ -1263,7 +1271,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         bookbutton.setEnabled(false);
         displayPanelChange(FBPanel);
-
+        
         int counter = 0;
         String[] tempNum = new String[numofticket];
         for(Seat i : seatlist){
@@ -1329,7 +1337,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 if (DateChooser.getDate() == null ){
                     
                 }else{
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                     Date tempdate = DateChooser.getDate();
                     date = sdf.format(tempdate);
                 }
@@ -1377,6 +1385,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                     String stime = rs.getString("showtime");
                     String price = String.valueOf(rs.getInt("price"));
                     String type = rs.getString("movietype");
+                    
                     String tbData[] = {theatre, title, sdate, stime, price, type};
                     tblModel.addRow(tbData);
                 }
@@ -1411,10 +1420,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         int size = 0;
         int row = 0;
         char ch = 0;
-        //----------------------------------------------------------------------        
-        System.out.println(theatreid_select);
-        System.out.println(date_select);
-        System.out.println(time_select);
 
         try{
             Statement stm = db.getConnection().createStatement();
@@ -1427,8 +1432,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        System.out.println("showid = " + showid);
 
         try{
             Statement stm1 = db.getConnection().createStatement();
@@ -1537,10 +1540,10 @@ public class CustomerMenu extends javax.swing.JFrame {
         try{
             Statement stm3 = db.getConnection().createStatement();
             String sql3 = "SELECT *\n" +
-            "FROM ((shows\n" +
-            "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
-            "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
-            "WHERE shows.showid = '" + showid + "';";
+                          "FROM ((shows\n" +
+                          "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
+                          "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
+                          "WHERE shows.showid = '" + showid + "';";
             ResultSet rs3 = stm3.executeQuery(sql3);
             while(rs3.next()){
                 displaytitle.setText(rs3.getString("movie.title"));
@@ -1584,6 +1587,7 @@ public class CustomerMenu extends javax.swing.JFrame {
 
             displayPanelChange(ConfirmationPanel);
             afterdiscountprice = wholeTotal;
+            foodid = 0;
         }
         else if(!selectedfood.equals("-") && (quantity.getText().equals("") || quantity.getText().equals("0"))){
             JOptionPane.showMessageDialog(this, "Please Insert Quantity"); 
@@ -1655,9 +1659,14 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         else{
             try {
+                String sql = "";
+                if(foodid == 0){
+                    sql = "INSERT INTO booking (ic, totalprice) VALUES ('" + cus.getIc() + "', '" + afterdiscountprice + "');";
+                }else{
+                    sql = "INSERT INTO booking (ic, fbid, fbquantity, totalprice) " +
+                                 "VALUES ('" + cus.getIc() + "', '" + foodid +"', '" + foodquantity + "', '" + afterdiscountprice + "');";
+                }
                 //RETURN_GENERATED_ID
-                String sql = "INSERT INTO booking (ic, fbid, fbquantity, totalprice) " +
-                             "VALUES ('" + cus.getIc() + "', '" + foodid +"', '" + foodquantity + "', '" + afterdiscountprice + "');";
                 PreparedStatement ps = db.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 ps.execute();
                 ResultSet rs = ps.getGeneratedKeys();
@@ -1682,16 +1691,16 @@ public class CustomerMenu extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
-        // refresh record table
-        DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
-        displayRecord(tblModel1);
-        
-        seatpanel.removeAll();
-        seatpanel.updateUI();
-        
-        displayPanelChange(ReceiptPanel);
-        
-        viewReceipt(ReceiptText, bookid);
+            // refresh record table
+            DefaultTableModel tblModel1 = (DefaultTableModel)tickettable.getModel();
+            displayRecord(tblModel1);
+
+            seatpanel.removeAll();
+            seatpanel.updateUI();
+
+            displayPanelChange(ReceiptPanel);
+
+            viewReceipt(ReceiptText, bookid);
         }
     }//GEN-LAST:event_PayButtonActionPerformed
 
@@ -1829,6 +1838,10 @@ public class CustomerMenu extends javax.swing.JFrame {
         displayProfile(cus);
     }//GEN-LAST:event_updateProfileActionPerformed
 
+    private void currentpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentpasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_currentpasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1882,6 +1895,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                          "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
                          "ORDER BY shows.showdate ASC, shows.showtime ASC;";
             ResultSet rs = stm.executeQuery(sql);
+            
             while(rs.next()){
                 String theatre = String.valueOf(rs.getInt("shows.theatreid"));
                 String title = rs.getString("movie.title");
@@ -1889,6 +1903,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 String stime = rs.getString("shows.showtime");
                 String price = String.valueOf(rs.getInt("movie.price"));
                 String type = rs.getString("movie.movietype");
+                
                 String tbData[] = {theatre, title, sdate, stime, price, type};
                 tblModel.addRow(tbData);
             }
@@ -1919,6 +1934,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                           "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
                           "WHERE customer.ic = '" + cus.getIc() +"'\n" +
                           "ORDER BY bookdetail.bookid;";
+            
             ResultSet rs1 = stm1.executeQuery(sql1);
             while(rs1.next()){
                 String bookid = String.valueOf(rs1.getInt("bookid"));
@@ -1928,6 +1944,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                 String sdate = rs1.getString("showdate");
                 String stime = rs1.getString("showtime");
                 String price = String.valueOf(rs1.getInt("unitprice"));
+                
                 String tbData[] = {bookid, title, theatre, seatnum, sdate, stime, price};
                 tblModel.addRow(tbData);
             } 

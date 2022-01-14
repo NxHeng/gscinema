@@ -14,13 +14,18 @@ import java.sql.SQLException;
 public class Database {
     Connection connection;
     //connect with database
-    public void connect() throws SQLException{
+    public void connect(){
         try{
             
             String driver = "com.mysql.cj.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/gsc";
             String dbusername = "root";
             String dbpassword = "root";
+
+//            String driver = "com.mysql.cj.jdbc.Driver";
+//            String url = "jdbc:mysql://db4free.net:3306/abcinema";
+//            String dbusername = "abcinema";
+//            String dbpassword = "14569852asd";
             
             Class.forName(driver);
             connection = (Connection) DriverManager.getConnection(url,dbusername,dbpassword);

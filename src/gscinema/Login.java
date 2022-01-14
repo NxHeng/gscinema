@@ -16,13 +16,11 @@ import javax.swing.JOptionPane;
  * @author e-hen
  */
 public class Login extends javax.swing.JFrame {
-    private Database db;
+    private final Database db;
 
     public Login() {
-        try{
-            db = new Database();
-            db.connect();
-        } catch (SQLException e) {}
+        db = new Database();
+        db.connect();
         initComponents();
     }
 
@@ -509,18 +507,14 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
             
-            ResultSet result = db.getConnection().prepareStatement(String.format("SELECT * FROM CUSTOMER WHERE IC = '%s' AND CUS_PASSWORD = '%s'",
+            ResultSet result = db.getConnection().prepareStatement(String.format("SELECT * FROM customer WHERE IC = '%s' AND CUS_PASSWORD = '%s'",
                 ic, pass)).executeQuery();
             
             if(result.next()){
-                //JOptionPane.showMessageDialog(this, "Login Successful");
+                
                 //login set user personality
                 Customer cus = new Customer(result.getString("ic"),result.getString("cus_name"),result.getString("email"),result.getString("cus_password"),result.getString("mobile_num"));
-                /*
-                //create client class
-                Client c = new Client(u,db);
                 
-                */
                 CustomerMenu menu = new CustomerMenu(cus,db);
                 menu.setVisible(true);
                 dispose();
