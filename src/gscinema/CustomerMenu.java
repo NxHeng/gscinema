@@ -1494,7 +1494,7 @@ public class CustomerMenu extends javax.swing.JFrame {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //
+        // get the size of the theatre of the show
         try{
             Statement stm1 = db.getConnection().createStatement();
             String sql1 = "SELECT theatre.size \n" +
@@ -1505,13 +1505,14 @@ public class CustomerMenu extends javax.swing.JFrame {
             while(rs1.next()){
                 size = rs1.getInt("size");
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //----------------------------------------------------------------------
-        System.out.println("size = " + size);
-
+        
+        // for display the toggle button (seats)
+        // e.g. if the size is 70, then there will be 7 row (10 seats each row) (ABCDEFG)
+        // first row will be A1 to A10
+        // last row will be G1 to G10
         switch(size){
             case 50 -> {
                 row = 5;
@@ -1526,7 +1527,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 ch = 'I';
             }
         }
-
+        
+        // set the layout of the seat panel the grid layour based on the size (row and 10 columns + 4 disabled columns)
         seatpanel.setLayout(new GridLayout(row,14,5,5));
         for(char a = 'A'; a <= ch; a++){
             int counter = 1;
@@ -1540,6 +1542,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                     int selectedseatid = 0;
                     String seatnum = a + Integer.toString(counter);
                     String status = "";
+                    // to get the status of the seat (available or unavailable) and the seat id
+                    // from database (retrieve data)
                     try{
                         Statement stm2 = db.getConnection().createStatement();
                         String sql2 = "SELECT * FROM seat WHERE seatnum = '" + seatnum + "' AND showid = '" + showid + "'";
@@ -1548,6 +1552,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                             status = rs2.getString("status");
                             selectedseatid = rs2.getInt("seatid");
                         }
+                        
+                        // based on the seat id, we get the price of the seat/ticket
                         Statement stm4 = db.getConnection().createStatement();
                         String sql4 = "SELECT movie.price\n" +
                         "FROM (shows\n" +
@@ -1561,11 +1567,12 @@ public class CustomerMenu extends javax.swing.JFrame {
                         Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    //check availability
+                    //check status/availability (Available or unavailable)
                     if(status.equals("Unavailable")){
                         JToggleButton bt = new JToggleButton(seatnum);
                         bt.setFont(new Font("Arial", Font.PLAIN, 6));
                         bt.setPreferredSize(new Dimension(10, 10));
+                        //disable the seat(toggle button) if it is unavailable
                         bt.setEnabled(false);
                         seatpanel.add(bt);
                         seatlist.add(new Seat(selectedseatid, seatnum, true, Integer.parseInt(showid), bt));
@@ -1574,8 +1581,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                         JToggleButton bt = new JToggleButton(seatnum);
                         bt.setFont(new Font("Arial", Font.PLAIN, 7));
                         bt.setPreferredSize(new Dimension(20, 20));
+                        // enable the seat (toggle button) if it is available
                         bt.setEnabled(true);
-                        //bt.setBackground(Color.green);
                         seatpanel.add(bt);
                         seatlist.add(new Seat(selectedseatid, seatnum, false, Integer.parseInt(showid), bt));
                         counter++;
@@ -1587,6 +1594,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         //Disable seats for SOP
         for(int i = 0; i < seatlist.size(); i++){
            if(seatlist.get(i).isIsBooked() == true){
+               // if one of the two seats are booked then another seat should be disabled
                int tempnum = Integer.parseInt(seatlist.get(i).getNum().substring(1));
                if(tempnum%2 == 0){
                     seatlist.get(i-1).button.setEnabled(false);
@@ -1597,7 +1605,7 @@ public class CustomerMenu extends javax.swing.JFrame {
            } 
         }
         setVisible(true);
-
+        
         //DISPLAY ALL INFORMATION ABOUT THE MOVIE/SHOW below the table
         try{
             Statement stm3 = db.getConnection().createStatement();
@@ -1608,6 +1616,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                           "WHERE shows.showid = '" + showid + "';";
             ResultSet rs3 = stm3.executeQuery(sql3);
             while(rs3.next()){
+                // put all the information from database to the fields
                 displaytitle.setText(rs3.getString("movie.title"));
                 displaydate.setText(rs3.getString("shows.showdate"));
                 displaytime.setText(rs3.getString("shows.showtime"));
@@ -1619,11 +1628,10 @@ public class CustomerMenu extends javax.swing.JFrame {
                 displaycasts.setText(rs3.getString("movie.casts"));
                 displaysynopsis.setText(rs3.getString("movie.synopsis"));
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         //DESELECT ALL BUTTONS IF CUSTOMER CHOSE ANOTHER MOVIE
         for (Seat i : seatlist) {
             i.button.setSelected(false);
@@ -1631,8 +1639,11 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_ShowTableMouseClicked
 
     private void ProceedConfirmationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProceedConfirmationButtonActionPerformed
+        
+        // to get the selected food from the food menu combo box
         String selectedfood = (String) fbsetlist.getSelectedItem();
         
+        // if cus insert quantity value <= 0
         if(!quantity.getText().equals("")){
             if(Integer.parseInt(quantity.getText()) <= 0 && !quantity.getText().equals("")){
                 JOptionPane.showMessageDialog(this, "Invalid quantity value");
@@ -1640,24 +1651,31 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         }
         
+        // if customer did not choose menu and quantity
         if (selectedfood.equals("-") && quantity.getText().equals("")){
             fbsetdisplay.setText("No Beverages Selected");
             fbquantitydisplay.setText("No Quantity");
+            // the total price of the food + ticket  = ticket (because no food chosen)
             wholeTotal = movie_sum;
             String displaytotal = String.format("RM%.2f",wholeTotal);
+            // to display at confirmation page
             totalpricedisplay.setText(displaytotal);
-
+            
+            //change to confirmation panel
             displayPanelChange(ConfirmationPanel);
+            // initialise the after discount price to current price (to check whether its a student later)
             afterdiscountprice = wholeTotal;
+            // if no food chosen then set food id to 0
             foodid = 0;
-        }
+        }//when only food menu chosen (without quantity)
         else if(!selectedfood.equals("-") && (quantity.getText().equals("") || quantity.getText().equals("0"))){
             JOptionPane.showMessageDialog(this, "Please Insert Quantity"); 
-        }
+        }// when only quantity inserted (without menu)
         else if(selectedfood.equals("-") && !quantity.getText().equals("")){
             JOptionPane.showMessageDialog(this, "Please Select a menu"); 
-        }
+        }// both quantity and menu selected and inserted
         else if(!selectedfood.equals("-") && !quantity.getText().equals("")){
+            // get the food id from database (query)
             try {
                 Statement stm = db.getConnection().createStatement();
                 String sql = "SELECT * FROM food WHERE fbname = '" + selectedfood + "'";
@@ -1669,21 +1687,27 @@ public class CustomerMenu extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
-                foodquantity = Integer.parseInt(quantity.getText());
-                foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * foodquantity;
-                fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
-                fbquantitydisplay.setText("F&B Quantity: " + foodquantity);
-                wholeTotal = (foodprice + movie_sum);
-                String displaytotal = String.format("RM%.2f", wholeTotal);
-                totalpricedisplay.setText(displaytotal);
-
-                displayPanelChange(ConfirmationPanel);
-                
-                afterdiscountprice = wholeTotal;
+            //display the food information at confirmation panel
+            foodquantity = Integer.parseInt(quantity.getText());
+            foodprice = Integer.parseInt(fbunitprice.getText().substring(2, 4)) * foodquantity;
+            fbsetdisplay.setText("Food & Beverage: " + (String) fbsetlist.getSelectedItem());
+            fbquantitydisplay.setText("F&B Quantity: " + foodquantity);
+            // now the total will be price of food + ticket
+            wholeTotal = (foodprice + movie_sum);
+            String displaytotal = String.format("RM%.2f", wholeTotal);
+            totalpricedisplay.setText(displaytotal);
+            
+            //change to confirmation panel
+            displayPanelChange(ConfirmationPanel);
+            
+            // initialize the after discount price (if student) as current total
+            afterdiscountprice = wholeTotal;
         }
     }//GEN-LAST:event_ProceedConfirmationButtonActionPerformed
 
     private void fbsetlistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fbsetlistActionPerformed
+        // when customer choose a menu from the food menu combo box
+        // display the description about the food and the unit price at the panel
         try{
             String fbname = (String) fbsetlist.getSelectedItem();
             
@@ -1692,7 +1716,9 @@ public class CustomerMenu extends javax.swing.JFrame {
             ResultSet rs = stm.executeQuery(sql);
             
             while(rs.next()){
+                //display description
                 Description.setText(rs.getString("description"));
+                //display unit price
                 fbunitprice.setText(String.format("RM%4.2f", (double)rs.getInt("price")));
             }
         } catch (SQLException ex) {
@@ -1701,10 +1727,14 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_fbsetlistActionPerformed
 
     private void ProceedPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProceedPaymentButtonActionPerformed
+        // when proceed to payment panel
+        // check whether the customer is a student
         
+        // if the student check box is selected (ticked) but didnt fill in the blanks, then display 'please...'
         if(studentcheckbox.isSelected() && (studentemail.getText().equals("") || studentid.getText().equals(""))){
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
-        }else{
+        }//if information complete  
+        else{
             if(PaymentType.getSelectedItem().equals("Debit/Credit")){
                 displayPanelChange(CardPaymentPanel);
             }

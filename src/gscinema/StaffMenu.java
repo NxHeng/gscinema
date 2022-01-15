@@ -104,7 +104,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        LogoutButton = new javax.swing.JButton();
         GCStitle = new javax.swing.JLabel();
         welcomestaff = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -127,10 +127,10 @@ public class StaffMenu extends javax.swing.JFrame {
         price1 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         type1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        AddMovieButton = new javax.swing.JButton();
+        ClearAddMovieFieldsButton = new javax.swing.JButton();
+        refreshMovieTableButton = new javax.swing.JButton();
+        RemoveSelectedMovieButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         ShowTable = new javax.swing.JTable();
@@ -143,7 +143,7 @@ public class StaffMenu extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         stime3 = new javax.swing.JTextField();
         AddShowButton = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        RemoveSelectedShowButton = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         fnbtable = new javax.swing.JTable();
@@ -161,10 +161,10 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 153));
 
-        jButton1.setText("Logout");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        LogoutButton.setText("Logout");
+        LogoutButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                LogoutButtonActionPerformed(evt);
             }
         });
 
@@ -185,7 +185,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(LogoutButton)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -193,7 +193,7 @@ public class StaffMenu extends javax.swing.JFrame {
             .addComponent(GCStitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -254,31 +254,31 @@ public class StaffMenu extends javax.swing.JFrame {
 
         type1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Premium" }));
 
-        jButton2.setText("Add Movie");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        AddMovieButton.setText("Add Movie");
+        AddMovieButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                AddMovieButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Clear ");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        ClearAddMovieFieldsButton.setText("Clear ");
+        ClearAddMovieFieldsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                ClearAddMovieFieldsButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Refresh");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        refreshMovieTableButton.setText("Refresh");
+        refreshMovieTableButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                refreshMovieTableButtonActionPerformed(evt);
             }
         });
 
-        jButton8.setText("Remove Selected Movie");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        RemoveSelectedMovieButton.setText("Remove Selected Movie");
+        RemoveSelectedMovieButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                RemoveSelectedMovieButtonActionPerformed(evt);
             }
         });
 
@@ -289,7 +289,7 @@ public class StaffMenu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RemoveSelectedMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -313,11 +313,11 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(type1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshMovieTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(AddMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ClearAddMovieFieldsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -328,7 +328,7 @@ public class StaffMenu extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8)
+                        .addComponent(RemoveSelectedMovieButton)
                         .addContainerGap(26, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
@@ -363,9 +363,9 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(type1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(32, 32, 32)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton5))
+                            .addComponent(AddMovieButton)
+                            .addComponent(ClearAddMovieFieldsButton)
+                            .addComponent(refreshMovieTableButton))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -412,10 +412,10 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Remove Selected Show");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        RemoveSelectedShowButton.setText("Remove Selected Show");
+        RemoveSelectedShowButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                RemoveSelectedShowButtonActionPerformed(evt);
             }
         });
 
@@ -426,7 +426,7 @@ public class StaffMenu extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RemoveSelectedShowButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -475,7 +475,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7)
+                .addComponent(RemoveSelectedShowButton)
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -604,17 +604,17 @@ public class StaffMenu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
         Login log = new Login();
         log.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_LogoutButtonActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void RemoveSelectedShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveSelectedShowButtonActionPerformed
         DefaultTableModel tblModel3 = (DefaultTableModel)ShowTable.getModel();
         deleteShows(showid_Remove);
         refreshShows(tblModel3);
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_RemoveSelectedShowButtonActionPerformed
 
     private void AddShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowButtonActionPerformed
 
@@ -734,7 +734,7 @@ public class StaffMenu extends javax.swing.JFrame {
         showid_Remove = model.getValueAt(selectedRowIndex, 0).toString();
     }//GEN-LAST:event_ShowTableMouseClicked
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void RemoveSelectedMovieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveSelectedMovieButtonActionPerformed
         DefaultTableModel tblModel1 = (DefaultTableModel)MovieTable.getModel();
         DefaultTableModel tblModel2 = (DefaultTableModel)ShowTable.getModel();
 
@@ -745,14 +745,14 @@ public class StaffMenu extends javax.swing.JFrame {
         refreshShows(tblModel2);
         //refresh movie combo box
         movieComboBox();
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_RemoveSelectedMovieButtonActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void refreshMovieTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMovieTableButtonActionPerformed
         DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
         refreshMovie(tblModel);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_refreshMovieTableButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void ClearAddMovieFieldsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearAddMovieFieldsButtonActionPerformed
         title1.setText("");
         try {
             Date temp = new Date();
@@ -768,9 +768,9 @@ public class StaffMenu extends javax.swing.JFrame {
         synopsis1.setText("");
         duration1.setText("");
         price1.setText("");
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_ClearAddMovieFieldsButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void AddMovieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovieButtonActionPerformed
         DefaultTableModel tblModel = (DefaultTableModel)MovieTable.getModel();
         clearTable(tblModel);
 
@@ -821,7 +821,7 @@ public class StaffMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_AddMovieButtonActionPerformed
 
     private void MovieTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieTableMouseClicked
         //Store movie id to a temporary variable
@@ -1114,21 +1114,20 @@ public class StaffMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddMovieButton;
     private javax.swing.JButton AddShowButton;
+    private javax.swing.JButton ClearAddMovieFieldsButton;
     private javax.swing.JLabel GCStitle;
+    private javax.swing.JButton LogoutButton;
     private javax.swing.JTable MovieTable;
+    private javax.swing.JButton RemoveSelectedMovieButton;
+    private javax.swing.JButton RemoveSelectedShowButton;
     private javax.swing.JTable ShowTable;
     private javax.swing.JButton addMenuButton;
     private javax.swing.JTextArea casts1;
     private javax.swing.JToggleButton deletemenu;
     private javax.swing.JTextField duration1;
     private javax.swing.JTable fnbtable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1159,6 +1158,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JTextField menuPrice;
     private javax.swing.JComboBox<String> movie3;
     private javax.swing.JTextField price1;
+    private javax.swing.JButton refreshMovieTableButton;
     private com.toedter.calendar.JDateChooser releasedate1;
     private com.toedter.calendar.JDateChooser sdate3;
     private javax.swing.JTextField stime3;
