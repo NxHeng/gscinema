@@ -1727,14 +1727,15 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_fbsetlistActionPerformed
 
     private void ProceedPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProceedPaymentButtonActionPerformed
-        // when proceed to payment panel
+        // before proceed to payment panel
         // check whether the customer is a student
         
         // if the student check box is selected (ticked) but didnt fill in the blanks, then display 'please...'
         if(studentcheckbox.isSelected() && (studentemail.getText().equals("") || studentid.getText().equals(""))){
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
-        }//if information complete  
+        }//if information complete then proceed to 
         else{
+            // change to 
             if(PaymentType.getSelectedItem().equals("Debit/Credit")){
                 displayPanelChange(CardPaymentPanel);
             }
