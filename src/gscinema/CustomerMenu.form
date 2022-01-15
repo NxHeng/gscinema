@@ -1203,10 +1203,10 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="263" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
+                              <EmptySpace pref="274" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="CancelPaymentButton2" pref="244" max="32767" attributes="0"/>
                                   <Component id="qrcode" pref="0" max="32767" attributes="0"/>
-                                  <Component id="CancelPaymentButton2" pref="255" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="254" max="-2" attributes="0"/>
                           </Group>
@@ -1215,8 +1215,8 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="qrcode" pref="272" max="32767" attributes="0"/>
+                              <EmptySpace pref="14" max="32767" attributes="0"/>
+                              <Component id="qrcode" min="-2" pref="264" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="CancelPaymentButton2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>

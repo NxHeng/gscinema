@@ -64,9 +64,11 @@ public class CustomerMenu extends javax.swing.JFrame {
      */
     public CustomerMenu(Customer cus, Database db) {
         initComponents();
+        // Customer and Database's data from the previous frame (Login page) 
         this.cus = cus;
         this.db = db;
         
+        //Maximize the frame (Full screen)
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         //Welcome Text
@@ -82,13 +84,17 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         //MovieList - combo box
         try{
+            // to temporary store the movies
             ArrayList<String> movieItems = new ArrayList<>();
             Statement stm = db.getConnection().createStatement();
-            String sql = "SELECT * FROM movie ORDER BY title";
+            // to retrieve all the movies from database
+            String sql = "SELECT DISTINCT title FROM movie ORDER BY title";
+            //run query and store in rs
             ResultSet rs = stm.executeQuery(sql);
             while(rs.next()){
                 movieItems.add(rs.getString("title"));
             }
+            // add all the available movie into the combo box from the array list (using for loop)
             for (String i : movieItems) {
                 MovieList.addItem(i);
             }
@@ -98,13 +104,17 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         //TimeList
         try{
+            // to temporary store the time
             ArrayList<String> timeList = new ArrayList<>();
             Statement stm = db.getConnection().createStatement();
+            // to retrieve all the time from database
             String sql = "SELECT DISTINCT showtime FROM shows ORDER BY showtime DESC";
+            //run query and store in rs
             ResultSet rs = stm.executeQuery(sql);
             while(rs.next()){
                 timeList.add(rs.getString("showtime"));
             }
+            // add all the time slots into the combo box from the array list (using for loop)
             for (String i : timeList) {
                 TimeList.addItem(i);
             }
@@ -115,10 +125,12 @@ public class CustomerMenu extends javax.swing.JFrame {
         //Default Date
         try {
             Date temp = new Date();
+            // date format ddmmyyyy
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             String tempdate = sdf.format(temp);
             Date current = new SimpleDateFormat("dd-MM-yyyy").parse(tempdate);
             
+            // set the format of the date from the date chooser to ddmmyyyy
             DateChooser.setDate(current);
         } catch (ParseException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -126,6 +138,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         //F&B combo box list
         try{
+            //same as above
             ArrayList<String> foodlist = new ArrayList<>();
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT * FROM food ORDER BY fbid ASC";
@@ -140,12 +153,15 @@ public class CustomerMenu extends javax.swing.JFrame {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //display the profile information at the Profile tab (Method, refer below)
         displayProfile(cus);
+        // disable the print receipt button at the profile tab (default) 
         printReceipt2.setEnabled(false);
         
 //        ImageIcon image = new ImageIcon(getClass().getResource("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\Payment_Successful_.png"));
 //        Image scaledImage = image.getScaledInstance(qrcode.getWidth(),qrcode.getHeight(),Image.SCALE_SMOOTH);
 //        qrcode = new JLabel((Icon) scaledImage);
+        scaledImage();
                 
     }
 
@@ -851,17 +867,17 @@ public class CustomerMenu extends javax.swing.JFrame {
         EwalletPanelLayout.setHorizontalGroup(
             EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EwalletPanelLayout.createSequentialGroup()
-                .addGap(263, 263, 263)
-                .addGroup(EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(qrcode, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(CancelPaymentButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE))
+                .addContainerGap(274, Short.MAX_VALUE)
+                .addGroup(EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(CancelPaymentButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                    .addComponent(qrcode, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(254, 254, 254))
         );
         EwalletPanelLayout.setVerticalGroup(
             EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EwalletPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(qrcode, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(qrcode, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(CancelPaymentButton2)
                 .addGap(34, 34, 34))
@@ -1250,42 +1266,57 @@ public class CustomerMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
+        //Make the login page visible 
         Login log = new Login();
         log.setVisible(true);
+        //dispose(close) the customer menu page
         dispose();
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void bookbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookbuttonActionPerformed
         
+        //count the number of tickets selected from the seat's toggle buttons
         numofticket = 0;
         for (Seat i : seatlist) {
             if(i.button.isSelected() == true){
-                //System.out.println(i.getShowid() + " " + i.getNum() + " selected.");
                 numofticket++;
             }
         }
         
+        // if no buttons selected then display "Please..."
         if(numofticket == 0){
             JOptionPane.showMessageDialog(this, "Please Select Your Seat(s) to Proceed");
+            //stop the process
             return;
         }
+        //disable book button
         bookbutton.setEnabled(false);
+        
+        //change the displayPanel to Food and Beverage Panel (after customer choose seats)
+        //Method (Refer below)
         displayPanelChange(FBPanel);
+        
         
         int counter = 0;
         String[] tempNum = new String[numofticket];
         for(Seat i : seatlist){
             if(i.button.isSelected() == true && counter < numofticket){
-                //System.out.println(i.getShowid() + " " + i.getNum() + " selected.");
+                // to get the seat number (e.g. A1, B5, B6)
                 tempNum[counter] = i.getNum();
+                // to get the Show ID of the show that the customer chooses
                 selectedshowid = i.getShowid();
                 counter++;
             }
         }
+        
+        // for displaying the seats that are chosen by cus (e.g. in the format of 'Seats: A1 C3 C4')
         String displaychosen = "";
         for(int i = 0; i < numofticket; i++){
+            //concatenate the string(seat number)
             displaychosen += tempNum[i] + "  ";
         }
+        
+        // to get the information of the chosen show from Database based on 'showid'
         try{
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT *\n" +
@@ -1293,10 +1324,11 @@ public class CustomerMenu extends javax.swing.JFrame {
                          "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
                          "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
                          "WHERE shows.showid = '" + selectedshowid + "'";
+            // run the query(retrieve data) and store in rs
             ResultSet rs = stm.executeQuery(sql);
-
+            
             while(rs.next()){
-                //title
+                // display all the information at the confirmation panel
                 titledisplay.setText(rs.getString("movie.title"));
                 theatreiddisplay.setText("Theatre ID: " + String.valueOf(rs.getInt("shows.theatreid")));
                 showdatedisplay.setText("Date: " + rs.getString("shows.showdate"));
@@ -1310,13 +1342,14 @@ public class CustomerMenu extends javax.swing.JFrame {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
         //display chosen seat
-        seatsdisplay.setText("Seats: " + displaychosen);      
+        // this is the string from above that we concatenated
+        seatsdisplay.setText("Seats: " + displaychosen);
+        //get the sum of the original price of all the ticket/seats
         movie_sum = numofticket * price_select;
     }//GEN-LAST:event_bookbuttonActionPerformed
 
     private void DisplayAllShowsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DisplayAllShowsButtonActionPerformed
-
-//-----------------------------------------------------------------------------        
+        //back to default view (METHOD)
         backToDefaultView();
         
         //clear and display table (METHOD)
@@ -1325,31 +1358,45 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_DisplayAllShowsButtonActionPerformed
 
     private void SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchButtonActionPerformed
- 
+        //SEARCHING FOR SPECIFIC MOVIE/DATE/TIME
+        
         //clear table
         DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
         clearTable(tblModel);
 
         block:{
             try{
+                // get the selected movie (for searching)
                 String movietitle = (String) MovieList.getSelectedItem();
+                
+                //get the selectd date (for searching)
                 String date = "";
                 if (DateChooser.getDate() == null ){
                     
                 }else{
+                    // format the date to ddmmyyyy
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                     Date tempdate = DateChooser.getDate();
                     date = sdf.format(tempdate);
                 }
+                // get the selected time (for searching)
                 String time = (String) TimeList.getSelectedItem();
-
+                
+                // to filter and get the shows from database
                 Statement stm = db.getConnection().createStatement();
                 String sql = "SELECT shows.theatreid, movie.title, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
                              "FROM ((shows\n" +
                              "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
                              "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n";
                 
-                //conditions
+                /* for example
+                sql = "SELECT shows.theatreid, movie.title, shows.showdate, shows.showtime, movie.price, movie.movietype\n" +
+                      "FROM ((shows\n" +
+                      "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
+                      "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
+  (the condition) --> "WHERE title = '" + movietitle + "' and showdate = '" + date + "'";
+                */
+                //conditions (to concatenate the string at the bottom of 'String sql')
                 if(movietitle.equals("Select a movie") && date.isEmpty() && time.equals("Select a time")){
                     displayShows(tblModel);
                     break block;
@@ -1375,9 +1422,11 @@ public class CustomerMenu extends javax.swing.JFrame {
                 else{
                     sql = sql + "WHERE showtime = '" + time + "' and showdate = '" + date + "' and title = '" + movietitle + "'";
                 }
+                // run the query (retrieval of data from database)
                 ResultSet rs = stm.executeQuery(sql);
                 int counter = 0;
                 while(rs.next()){
+                    // counter is to check whether there is a show based on the conditions
                     counter++;
                     String theatre = String.valueOf(rs.getInt("theatreid"));
                     String title = rs.getString("title");
@@ -1389,11 +1438,14 @@ public class CustomerMenu extends javax.swing.JFrame {
                     String tbData[] = {theatre, title, sdate, stime, price, type};
                     tblModel.addRow(tbData);
                 }
+                // after searching for specific movie/time/date
+                // if counter = 0 means that there are no shows based on the conditions that the cus wanted
                 if(counter == 0){
+                    // display pop up message 'No show found'
                     JOptionPane.showMessageDialog(this, "No show found");
-                    //remove all components in panel.
+                    //remove all components in seat panel.
                     seatpanel.removeAll();
-                    // refresh the panel.
+                    // refresh the seat panel.
                     seatpanel.updateUI();
                 }
             } catch (SQLException ex) {
@@ -1403,28 +1455,37 @@ public class CustomerMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_SearchButtonActionPerformed
 
     private void ShowTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ShowTableMouseClicked
+        // WHEN CUSTOMER CLICKED/CHOOSES ONE OF THE MOVIE 
         
+        // enable the book button only after the cus chooses a movie
         bookbutton.setEnabled(true);
-
+        
+        // Make the seat panel visible (the screen beside the Shows Table)
         displayPanelChange(seatpanel);
+        //clean/clear the panel everytime when the customer selected a show to prevent overlaping of the seats (button) at saet panel
         seatpanel.removeAll();
         seatpanel.updateUI();
-
+        
+        //to get the information of the selected row
         DefaultTableModel model = (DefaultTableModel)ShowTable.getModel();
         int selectedRowIndex = ShowTable.getSelectedRow();
         
+        // to get the 3 data from each column of the selected row
         theatreid_select  = (String) model.getValueAt(selectedRowIndex, 0);
         date_select = (String) model.getValueAt(selectedRowIndex, 2);
         time_select = (String) model.getValueAt(selectedRowIndex, 3);
+        
         String showid = "";
         int size = 0;
         int row = 0;
         char ch = 0;
-
+        
+        //to retrieve the show's information (showid) from database of the selected show
         try{
             Statement stm = db.getConnection().createStatement();
             String sql = "SELECT * FROM shows WHERE theatreid = '" + theatreid_select + "' " + 
                          "AND shows.showdate = '" + date_select + "' AND shows.showtime = '" + time_select + "'";
+            //run query
             ResultSet rs = stm.executeQuery(sql);
             while(rs.next()){
                 showid = String.valueOf(rs.getInt("showid"));
@@ -1432,7 +1493,8 @@ public class CustomerMenu extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        //
         try{
             Statement stm1 = db.getConnection().createStatement();
             String sql1 = "SELECT theatre.size \n" +
@@ -1928,7 +1990,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                           "FROM ((((((bookdetail\n" +
                           "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
                           "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
-                          "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                          "LEFT JOIN food ON booking.fbid = food.fbid)\n" +
                           "INNER JOIN customer ON booking.ic = customer.ic)\n" +
                           "INNER JOIN shows ON seat.showid = shows.showid)\n" +
                           "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
@@ -1983,7 +2045,7 @@ public class CustomerMenu extends javax.swing.JFrame {
     }
     
     private void viewReceipt(JTextArea textArea, String passedbookid){
-       Date today = new Date();
+       
        String bookid = "";
        String movietitle = "";
        String theatre = "";
@@ -2000,7 +2062,7 @@ public class CustomerMenu extends javax.swing.JFrame {
                        "FROM ((((((bookdetail\n" +
                        "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
                        "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
-                       "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                       "LEFT JOIN food ON booking.fbid = food.fbid)\n" +
                        "INNER JOIN customer ON booking.ic = customer.ic)\n" +
                        "INNER JOIN shows ON seat.showid = shows.showid)\n" +
                        "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
@@ -2015,7 +2077,13 @@ public class CustomerMenu extends javax.swing.JFrame {
                showtime = rs.getString("shows.showtime");
                seat.append(rs.getString("seat.seatnum")).append(" ");
                fnbname = rs.getString("food.fbname");
+               if(fnbname == null){
+                   fnbname = "-";
+               }
                fnbquantity = String.valueOf(rs.getInt("booking.fbquantity"));
+               if(fnbquantity.equals("0")){
+                   fnbquantity = "-";
+               }
                totalprice = rs.getDouble("booking.totalprice");
            }
        } catch (SQLException ex) {
@@ -2025,7 +2093,6 @@ public class CustomerMenu extends javax.swing.JFrame {
                      "=========================================\n" +
                      "Customer Name: " + cus.getName() +"\n" +
                      "=========================================\n" +
-                     "Date: " + today + "\n" +
                      "Book ID: " + bookid + "\n" +
                      "=========================================\n" +
                      "Movie Title: " + movietitle + "\n" +
@@ -2039,6 +2106,15 @@ public class CustomerMenu extends javax.swing.JFrame {
                      "=========================================\n" +
                      "TOTAL PRICE: " + String.format("RM%.2f", totalprice) + "\n";
        textArea.setText(text);
+    }
+    
+    public void scaledImage(){
+        ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\Payment_Successful2.png");
+        
+        Image img = icon.getImage();
+        Image imgScale = img.getScaledInstance(qrcode.getWidth(), qrcode.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(imgScale);
+        qrcode.setIcon(scaledIcon);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
