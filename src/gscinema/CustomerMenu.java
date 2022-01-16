@@ -238,9 +238,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         expdate = new javax.swing.JTextField();
         PayButton = new javax.swing.JButton();
         CancelPaymentButton = new javax.swing.JButton();
-        EwalletPanel = new javax.swing.JPanel();
-        CancelPaymentButton2 = new javax.swing.JButton();
-        qrcode = new javax.swing.JLabel();
         ReceiptPanel = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         ReceiptText = new javax.swing.JTextArea();
@@ -756,39 +753,6 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         DisplayPanel.add(CardPaymentPanel, "card5");
 
-        CancelPaymentButton2.setText("Cancel Payment");
-        CancelPaymentButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelPaymentButton2ActionPerformed(evt);
-            }
-        });
-
-        qrcode.setText("jLabel36");
-        qrcode.setPreferredSize(new java.awt.Dimension(3049, 3817));
-
-        javax.swing.GroupLayout EwalletPanelLayout = new javax.swing.GroupLayout(EwalletPanel);
-        EwalletPanel.setLayout(EwalletPanelLayout);
-        EwalletPanelLayout.setHorizontalGroup(
-            EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EwalletPanelLayout.createSequentialGroup()
-                .addContainerGap(296, Short.MAX_VALUE)
-                .addGroup(EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(CancelPaymentButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
-                    .addComponent(qrcode, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(254, 254, 254))
-        );
-        EwalletPanelLayout.setVerticalGroup(
-            EwalletPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EwalletPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(qrcode, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(CancelPaymentButton2)
-                .addGap(34, 34, 34))
-        );
-
-        DisplayPanel.add(EwalletPanel, "card6");
-
         ReceiptText.setEditable(false);
         ReceiptText.setColumns(20);
         ReceiptText.setRows(5);
@@ -1002,10 +966,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(l10)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(imagelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout MoviePanelLayout = new javax.swing.GroupLayout(MoviePanel);
@@ -1796,12 +1759,7 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         }
         else{
-//            if(PaymentType.getSelectedItem().equals("Debit/Credit")){
                 displayPanelChange(CardPaymentPanel);
-//            }
-//            else{
-//                displayPanelChange(EwalletPanel);
-//            }
         }
     }//GEN-LAST:event_ProceedPaymentButtonActionPerformed
 
@@ -1908,13 +1866,6 @@ public class CustomerMenu extends javax.swing.JFrame {
             //ShowTable.setEnabled(true);
         } else {}
     }//GEN-LAST:event_CancelPaymentButtonActionPerformed
-
-    private void CancelPaymentButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelPaymentButton2ActionPerformed
-        int yn = JOptionPane.showConfirmDialog(null, "Do you want to cancel your payment?", "Cancel Payment", JOptionPane.YES_NO_OPTION);
-        if (yn == JOptionPane.YES_OPTION) {
-            backToDefaultView();
-        } else {}
-    }//GEN-LAST:event_CancelPaymentButton2ActionPerformed
 
     private void tickettableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tickettableMouseClicked
         qrcodelabel.setIcon(null);
@@ -2246,7 +2197,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                       "=========================================\n" +
                       "TOTAL PRICE: " + String.format("RM%.2f", totalprice) + "\n";
         textArea.setText(text);
-
+        
+        //QR Code
         GenerateQRCode qr = new GenerateQRCode(movietitle, cus.getName(), bookid, theatre, showdate, showtime, seat);
         ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Pictures\\Java\\qrcode.png");
         Image img = icon.getImage();
@@ -2296,14 +2248,12 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JButton BackToSeatsButton;
     private javax.swing.JPanel BookedTicketsPanel;
     private javax.swing.JButton CancelPaymentButton;
-    private javax.swing.JButton CancelPaymentButton2;
     private javax.swing.JPanel CardPaymentPanel;
     private javax.swing.JPanel ConfirmationPanel;
     private com.toedter.calendar.JDateChooser DateChooser;
     private javax.swing.JTextArea Description;
     private javax.swing.JButton DisplayAllShowsButton;
     private javax.swing.JPanel DisplayPanel;
-    private javax.swing.JPanel EwalletPanel;
     private javax.swing.JPanel FBPanel;
     private javax.swing.JButton LogoutButton;
     private javax.swing.JTabbedPane MainTabbedPanel;
@@ -2398,7 +2348,6 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JTextField pfphone;
     private javax.swing.JButton printReceipt;
     private javax.swing.JButton printReceipt2;
-    private javax.swing.JLabel qrcode;
     private javax.swing.JLabel qrcodelabel;
     private javax.swing.JLabel qrcodelabel2;
     private javax.swing.JTextField quantity;
