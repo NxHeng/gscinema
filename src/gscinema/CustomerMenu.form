@@ -167,7 +167,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="59" max="32767" attributes="0"/>
+                      <EmptySpace pref="103" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1079,57 +1079,65 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="imagelabel" min="-2" pref="191" max="-2" attributes="0"/>
+                          <Component id="imagelabel" min="-2" pref="155" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="l5" max="32767" attributes="0"/>
-                                      <Component id="l4" alignment="1" min="-2" pref="83" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="displaytype" max="32767" attributes="0"/>
-                                      <Component id="displayprice" max="32767" attributes="0"/>
+                                      <Component id="l9" min="-2" pref="83" max="-2" attributes="0"/>
+                                      <Component id="l10" min="-2" pref="83" max="-2" attributes="0"/>
                                   </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="l8" min="-2" pref="83" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                  <Component id="displayduration" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="l3" max="32767" attributes="0"/>
-                                      <Component id="l1" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="l2" alignment="1" min="-2" pref="83" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace pref="32" max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="displaytime" min="-2" pref="509" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="displaydate" alignment="1" pref="509" max="32767" attributes="0"/>
-                                          <Component id="displaytitle" alignment="1" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="l9" pref="83" max="32767" attributes="0"/>
-                                      <Component id="l10" pref="83" max="32767" attributes="0"/>
-                                      <Component id="l7" max="32767" attributes="0"/>
-                                      <Component id="l6" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="32" pref="32" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="displayreleasedate" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="displaytheatre" max="32767" attributes="0"/>
-                                      <Component id="jScrollPane4" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane4" pref="509" max="32767" attributes="0"/>
                                       <Component id="jScrollPane3" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="l1" max="32767" attributes="0"/>
+                                      <Component id="l4" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
+                                      <Component id="l2" min="-2" pref="83" max="-2" attributes="0"/>
+                                      <Component id="l6" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
+                                      <Component id="l8" min="-2" pref="83" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="displaydate" min="-2" pref="204" max="-2" attributes="0"/>
+                                              <Component id="displaytheatre" min="-2" pref="204" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="l3" min="-2" pref="83" max="-2" attributes="0"/>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Component id="displaytime" min="-2" pref="198" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="l5" min="-2" pref="83" max="-2" attributes="0"/>
+                                                      <Component id="l7" min="-2" pref="83" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="displayreleasedate" min="-2" pref="198" max="-2" attributes="0"/>
+                                                      <Component id="displayprice" min="-2" pref="198" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <Component id="displaytitle" alignment="0" min="-2" pref="509" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="displaytype" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="305" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="displayduration" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1138,38 +1146,29 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="displaytitle" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="l1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="l2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="displaydate" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="displaytime" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="displaydate" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="l3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="displaytime" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="l2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="l4" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="displaytype" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="displayprice" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="l5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="displayprice" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="l6" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="displaytheatre" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="l7" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="displayreleasedate" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -1188,8 +1187,9 @@
                                       <Component id="l10" min="-2" max="-2" attributes="0"/>
                                       <Component id="jScrollPane3" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="imagelabel" alignment="0" min="-2" pref="266" max="-2" attributes="0"/>
+                              <Component id="imagelabel" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
