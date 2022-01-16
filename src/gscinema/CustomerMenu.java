@@ -1418,9 +1418,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 
                 //get the selectd date (for searching)
                 String date = "";
-                if (DateChooser.getDate() == null ){
-                    
-                }else{
+                if (DateChooser.getDate() == null ){}
+                else{
                     // format the date to ddmmyyyy
                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                     Date tempdate = DateChooser.getDate();
@@ -2255,15 +2254,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         ImageIcon scaledIcon = new ImageIcon(imgScale);
         QR.setIcon(scaledIcon);
     }
-    
-//    public void scaledImage(){
-//        ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\Payment_Successful2.png");
-//        
-//        Image img = icon.getImage();
-//        Image imgScale = img.getScaledInstance(qrcode.getWidth(), qrcode.getHeight(), Image.SCALE_SMOOTH);
-//        ImageIcon scaledIcon = new ImageIcon(imgScale);
-//        qrcode.setIcon(scaledIcon);
-//    }
     
     public static boolean valEmail(String email){
         String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";

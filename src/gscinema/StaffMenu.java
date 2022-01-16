@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -648,7 +650,7 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_RemoveSelectedShowButtonActionPerformed
 
     private void AddShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowButtonActionPerformed
-
+        DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
         //ADD SHOW BUTTON
         String showid = "";
         String movieidName = (String) movie3.getSelectedItem();
@@ -669,26 +671,57 @@ public class StaffMenu extends javax.swing.JFrame {
         String theatreid = (String) theatre3.getSelectedItem();
         //to get the theatre id at the first position
         theatreid = theatreid.substring(0, 1);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
-        String date = sdf.format(sdate3.getDate());
+        
+        String date = "";
+        
         String time = stime3.getText();
 
         try{
-            if(movieid.equals("")||theatreid.equals("")||date.equals("")||time.equals("")){
+            if(movieid.equals("")||theatreid.equals("")||time.equals("")){
                 JOptionPane.showMessageDialog(this, "Please fill in the blank(s)");
+                refreshShows(tblModel);
             }
             else{
-
-                String sql = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
+                if (sdate3.getDate() == null ){
+                    JOptionPane.showMessageDialog(this, "Invalid Date");
+                    refreshShows(tblModel);
+                    return;
+                }else{
+                   // format the date to ddmmyyyy
+                   SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                   Date tempdate = sdate3.getDate();
+                   date = sdf.format(tempdate);
+                } 
+                
+                if(valTime(time) == false){
+                    JOptionPane.showMessageDialog(this, "Invalid Time Format");
+                    refreshShows(tblModel);
+                    return;
+                }
+                
+                //check shows overlapping
+                Statement stm = db.getConnection().createStatement();
+                String sql = "SELECT * FROM shows WHERE theatreid = '" + theatreid + "' AND showdate = '" + date + "' AND '" + time + "'";
+                ResultSet rs2 = stm.executeQuery(sql);
+                if (rs2.next()){
+                    String temp = String.valueOf(rs2.getInt("showid"));
+                    if(temp != null){
+                        JOptionPane.showMessageDialog(this, "Unavailable");
+                        refreshShows(tblModel);
+                        return;
+                    }
+                }
+                
+                String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
                 "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
-                PreparedStatement ps = db.getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = db.getConnection().prepareStatement(sql3,Statement.RETURN_GENERATED_KEYS);
                 ps.execute();
                 ResultSet rs = ps.getGeneratedKeys();
                 while(rs.next()){
                     showid = String.valueOf(rs.getInt(1));
                 }
 
-                JOptionPane.showMessageDialog(this, "The movie added succesfully");
+                JOptionPane.showMessageDialog(this, "The show added succesfully");
 
                 //GENERATE TICKETS FOR ALL SEATS
                 //Identify the size of theatre
@@ -751,7 +784,6 @@ public class StaffMenu extends javax.swing.JFrame {
                 stime3.setText("");
 
                 //REFRESH TABLE
-                DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
                 refreshShows(tblModel);
             }
         } catch (SQLException ex) {
@@ -799,6 +831,7 @@ public class StaffMenu extends javax.swing.JFrame {
         synopsis1.setText("");
         duration1.setText("");
         price1.setText("");
+        imagelabel.setIcon(null);
     }//GEN-LAST:event_ClearAddMovieFieldsButtonActionPerformed
 
     private void AddMovieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovieButtonActionPerformed
@@ -814,17 +847,25 @@ public class StaffMenu extends javax.swing.JFrame {
             String duration2 = duration1.getText();
             String price2 = price1.getText();
             String type2 = (String) type1.getSelectedItem();
+            
 
             if(title2.equals("")||date2.equals("")||casts2.equals("")||synopsis2.equals("")||duration2.equals("")||price2.equals("")||type2.equals("")){
                 JOptionPane.showMessageDialog(this, "Please fill in the blank(s)");
+                refreshMovie(tblModel);
             }
             else{
+                if(valPrice(price2) == false || price2.equals("0")){
+                    JOptionPane.showMessageDialog(this, "Invalid Price Format");
+                    refreshMovie(tblModel);
+                    return;
+                }
+                if (imagelabel.getIcon() == null) {
+                    JOptionPane.showMessageDialog(this, "Please insert a picture");
+                    refreshMovie(tblModel);
+                    return;
+                }
+                
                 InputStream is = new FileInputStream(new File(p));
-//                Statement stm = db.getConnection().createStatement();
-//                String sql2 = "INSERT INTO movie (title, releasedate, casts, synopsis, duration, price, movietype, image)" +
-//                "VALUES('" + title2 + "', '" + date2 +"', "+
-//                "'" + casts2 + "', '" + synopsis2 + "', '" + duration2 + "', '" + price2 + "', '" + type2 + "', '" + is + "')";
-//                stm.executeUpdate(sql2);
 
                 PreparedStatement ps = db.getConnection().prepareStatement("INSERT INTO movie " + 
                         "(title, releasedate, casts, synopsis, duration, price, movietype, image) VALUES (?, ?, ?, ?, ? ,?, ?, ?);");
@@ -864,7 +905,7 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         } catch (SQLException | FileNotFoundException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }//GEN-LAST:event_AddMovieButtonActionPerformed
 
     private void MovieTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieTableMouseClicked
@@ -893,9 +934,22 @@ public class StaffMenu extends javax.swing.JFrame {
             String menudescription = menuDescription.getText();
             String menuprice = menuPrice.getText();
             
-            Statement stm = db.getConnection().createStatement();
-            String sql = "INSERT INTO food (fbname, description, price) VALUES ('" + menuname + "', '" + menudescription + "', '" + menuprice + "')";
-            stm.executeUpdate(sql);
+            if(menuname.equals("") || menudescription.equals("") || menuprice.equals("")){
+                JOptionPane.showMessageDialog(this, "Please fill in the blanks");
+                refreshMenu(tblModel3);
+                return;
+            }
+            else{
+                if(valPrice(menuprice) == false || menuprice.equals("0")){
+                    JOptionPane.showMessageDialog(this, "Invalid Price Format");
+                    refreshMenu(tblModel3);
+                    return;
+                }
+                
+                Statement stm = db.getConnection().createStatement();
+                String sql = "INSERT INTO food (fbname, description, price) VALUES ('" + menuname + "', '" + menudescription + "', '" + menuprice + "')";
+                stm.executeUpdate(sql);
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1179,6 +1233,21 @@ public class StaffMenu extends javax.swing.JFrame {
         ImageIcon image = new ImageIcon(newImage);
         return image;
     }
+    
+    public static boolean valTime(String time){
+        String timeRegex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
+        Pattern timePat = Pattern.compile(timeRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = timePat.matcher(time);
+        return matcher.find();
+    }
+    
+    public static boolean valPrice(String price){
+        String priceRegex = "^\\d{1,2}$";
+        Pattern pricePat = Pattern.compile(priceRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pricePat.matcher(price);
+        return matcher.find();
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddMovieButton;
