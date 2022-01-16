@@ -224,7 +224,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         fbsetdisplay = new javax.swing.JLabel();
         fbquantitydisplay = new javax.swing.JLabel();
         ProceedPaymentButton = new javax.swing.JButton();
-        PaymentType = new javax.swing.JComboBox<>();
         studentcheckbox = new javax.swing.JCheckBox();
         studentemail = new javax.swing.JTextField();
         jLabel34 = new javax.swing.JLabel();
@@ -570,8 +569,6 @@ public class CustomerMenu extends javax.swing.JFrame {
             }
         });
 
-        PaymentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Debit/Credit", "e-Wallet" }));
-
         studentcheckbox.setText("Are you a student?");
         studentcheckbox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         studentcheckbox.addActionListener(new java.awt.event.ActionListener() {
@@ -618,7 +615,6 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(ProceedPaymentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(PaymentType, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(studentemail, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(backtofnbbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -657,13 +653,11 @@ public class CustomerMenu extends javax.swing.JFrame {
                         .addComponent(jLabel35)
                         .addComponent(studentcheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(studentid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addComponent(ProceedPaymentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(backtofnbbutton)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         DisplayPanel.add(ConfirmationPanel, "card3");
@@ -2265,7 +2259,6 @@ public class CustomerMenu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> MovieList;
     private javax.swing.JPanel MoviePanel;
     private javax.swing.JButton PayButton;
-    private javax.swing.JComboBox<String> PaymentType;
     private javax.swing.JButton ProceedConfirmationButton;
     private javax.swing.JButton ProceedPaymentButton;
     private javax.swing.JPanel ProfilePanel;
