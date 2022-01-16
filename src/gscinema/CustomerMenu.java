@@ -71,7 +71,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         //GSC Logo
-        ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\GSC-Cinema-Vector-Logo.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\src\\gscinema\\GSC-Cinema-Vector-Logo.png");
         Image img = icon.getImage();
         Image imgScale = img.getScaledInstance(GSCTitle.getWidth(), GSCTitle.getHeight(),Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(imgScale);
