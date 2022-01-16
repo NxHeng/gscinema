@@ -1226,7 +1226,7 @@ public class StaffMenu extends javax.swing.JFrame {
         }
     }
     
-    public ImageIcon ResizeImage(String imgPath, JLabel imagelabel){
+    private ImageIcon ResizeImage(String imgPath, JLabel imagelabel){
         ImageIcon MyImage = new ImageIcon(imgPath);
         Image img = MyImage.getImage();
         Image newImage = img.getScaledInstance(imagelabel.getWidth(), imagelabel.getHeight(),Image.SCALE_SMOOTH);
@@ -1234,14 +1234,14 @@ public class StaffMenu extends javax.swing.JFrame {
         return image;
     }
     
-    public static boolean valTime(String time){
+    private static boolean valTime(String time){
         String timeRegex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$";
         Pattern timePat = Pattern.compile(timeRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = timePat.matcher(time);
         return matcher.find();
     }
     
-    public static boolean valPrice(String price){
+    private static boolean valPrice(String price){
         String priceRegex = "^\\d{1,2}$";
         Pattern pricePat = Pattern.compile(priceRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pricePat.matcher(price);

@@ -2255,38 +2255,38 @@ public class CustomerMenu extends javax.swing.JFrame {
         QR.setIcon(scaledIcon);
     }
     
-    public static boolean valEmail(String email){
+    private static boolean valEmail(String email){
         String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = emailPat.matcher(email);
         return matcher.find();
     }
     
-    public static boolean valPhone(String phone){
-        String emailRegex = "^\\d{10,11}$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(phone);
+    private static boolean valPhone(String phone){
+        String phoneRegex = "^\\d{10,11}$";
+        Pattern phonePat = Pattern.compile(phoneRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = phonePat.matcher(phone);
         return matcher.find();
     }
     
-    public static boolean valCardNum(String cardnum){
-        String emailRegex = "^\\d{16}$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(cardnum);
+    private static boolean valCardNum(String cardnum){
+        String cardRegex = "^\\d{16}$";
+        Pattern cardPat = Pattern.compile(cardRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = cardPat.matcher(cardnum);
         return matcher.find();
     }
     
-    public static boolean valCsv(String csv){
-        String emailRegex = "^\\d{3}$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(csv);
+    private static boolean valCsv(String csv){
+        String csvRegex = "^\\d{3}$";
+        Pattern csvPat = Pattern.compile(csvRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = csvPat.matcher(csv);
         return matcher.find();
     }
     
-    public static boolean valExp(String exp){
-        String emailRegex = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(exp);
+    private static boolean valExp(String exp){
+        String expRegex = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
+        Pattern expPat = Pattern.compile(expRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = expPat.matcher(exp);
         return matcher.find();
     }
     

@@ -750,24 +750,24 @@ public class Login extends javax.swing.JFrame {
         });
     }
     
-    public static boolean valEmail(String email){
+    private static boolean valEmail(String email){
         String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = emailPat.matcher(email);
         return matcher.find();
     }
     
-    public static boolean valIc(String ic){
-        String emailRegex = "^\\d{12}$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(ic);
+    private static boolean valIc(String ic){
+        String icRegex = "^\\d{12}$";
+        Pattern icPat = Pattern.compile(icRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = icPat.matcher(ic);
         return matcher.find();
     }
     
-    public static boolean valPhone(String phone){
-        String emailRegex = "^\\d{10,11}$";
-        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = emailPat.matcher(phone);
+    private static boolean valPhone(String phone){
+        String phoneRegex = "^\\d{10,11}$";
+        Pattern phonePat = Pattern.compile(phoneRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = phonePat.matcher(phone);
         return matcher.find();
     }
 
