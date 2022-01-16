@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -551,6 +553,21 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
             
+            
+            if(valIc(ic) == false){
+                JOptionPane.showMessageDialog(this, "Invalid IC Number");
+                return;
+            }
+            
+            if(valEmail(email) == false){
+                JOptionPane.showMessageDialog(this, "Invalid Email");
+                return;
+            }
+            
+            if(valPhone(phone) == false){
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number");
+                return;
+            }
             //check if the account exists
             ResultSet rs = db.getConnection().prepareStatement(String.format("SELECT * FROM customer WHERE ic ='%s'",
                 ic)).executeQuery();
@@ -648,6 +665,11 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
             
+            if(valEmail(email) == false){
+                JOptionPane.showMessageDialog(this, "Invalid Email");
+                return;
+            }
+            
             //check if the account exists
             ResultSet rs = db.getConnection().prepareStatement(String.format("SELECT * FROM staff WHERE staffid ='%s'",
                 id)).executeQuery();
@@ -688,11 +710,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_staffregisterActionPerformed
 
     private void staffcpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffcpasswordActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_staffcpasswordActionPerformed
 
     private void staffpassword1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffpassword1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_staffpassword1ActionPerformed
 
     /**
@@ -728,6 +748,27 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
+    }
+    
+    public static boolean valEmail(String email){
+        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(email);
+        return matcher.find();
+    }
+    
+    public static boolean valIc(String ic){
+        String emailRegex = "^\\d{12}$";
+        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(ic);
+        return matcher.find();
+    }
+    
+    public static boolean valPhone(String phone){
+        String emailRegex = "^\\d{10,11}$";
+        Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(phone);
+        return matcher.find();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
