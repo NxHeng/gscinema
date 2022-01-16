@@ -4,6 +4,11 @@
  */
 package gscinema;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +19,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,6 +37,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private String movieid_Remove;
     private String showid_Remove;
     private String foodid_Remove;
+    String p;
     /**
      * Creates new form StaffMenu
      * @param stf
@@ -131,6 +141,8 @@ public class StaffMenu extends javax.swing.JFrame {
         ClearAddMovieFieldsButton = new javax.swing.JButton();
         refreshMovieTableButton = new javax.swing.JButton();
         RemoveSelectedMovieButton = new javax.swing.JButton();
+        imagelabel = new javax.swing.JLabel();
+        browseImage = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         ShowTable = new javax.swing.JTable();
@@ -282,18 +294,27 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
+        imagelabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        browseImage.setText("Browse");
+        browseImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseImageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(RemoveSelectedMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(RemoveSelectedMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
@@ -312,10 +333,14 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(price1)
                             .addComponent(type1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
                         .addComponent(refreshMovieTableButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(AddMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(imagelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(browseImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(AddMovieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(ClearAddMovieFieldsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -329,9 +354,8 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(RemoveSelectedMovieButton)
-                        .addContainerGap(26, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(title1))
@@ -361,12 +385,19 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(type1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(imagelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addComponent(browseImage)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddMovieButton)
-                            .addComponent(ClearAddMovieFieldsButton)
-                            .addComponent(refreshMovieTableButton))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(refreshMovieTableButton)
+                            .addComponent(ClearAddMovieFieldsButton))
+                        .addContainerGap(18, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Edit Movies", jPanel2);
@@ -476,7 +507,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(RemoveSelectedShowButton)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Edit Shows", jPanel4);
@@ -580,7 +611,7 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(menuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(addMenuButton)))
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addContainerGap(240, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Food and Beverages", jPanel5);
@@ -788,12 +819,24 @@ public class StaffMenu extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Please fill in the blank(s)");
             }
             else{
-                Statement stm = db.getConnection().createStatement();
-                String sql2 = "INSERT INTO movie (title, releasedate, casts, synopsis, duration, price, movietype)" +
-                "VALUES('" + title2 + "', '" + date2 +"', "+
-                "'" + casts2 + "', '" + synopsis2 + "', '" + duration2 + "', '" + price2 + "', '" + type2 + "')";
-                stm.executeUpdate(sql2);
+                InputStream is = new FileInputStream(new File(p));
+//                Statement stm = db.getConnection().createStatement();
+//                String sql2 = "INSERT INTO movie (title, releasedate, casts, synopsis, duration, price, movietype, image)" +
+//                "VALUES('" + title2 + "', '" + date2 +"', "+
+//                "'" + casts2 + "', '" + synopsis2 + "', '" + duration2 + "', '" + price2 + "', '" + type2 + "', '" + is + "')";
+//                stm.executeUpdate(sql2);
 
+                PreparedStatement ps = db.getConnection().prepareStatement("INSERT INTO movie " + 
+                        "(title, releasedate, casts, synopsis, duration, price, movietype, image) VALUES (?, ?, ?, ?, ? ,?, ?, ?);");
+                ps.setString(1, title2);
+                ps.setString(2, date2);
+                ps.setString(3, casts2);
+                ps.setString(4, synopsis2);
+                ps.setString(5, duration2);
+                ps.setString(6, price2);
+                ps.setString(7, type2);
+                ps.setBlob(8, is);   
+                ps.executeUpdate();
                 JOptionPane.showMessageDialog(this, "The movie added succesfully");
 
                 //clear fill
@@ -812,15 +855,16 @@ public class StaffMenu extends javax.swing.JFrame {
                 synopsis1.setText("");
                 duration1.setText("");
                 price1.setText("");
+                imagelabel.setIcon(null);
 
                 //refresh movie table
                 refreshMovie(tblModel);
                 //refresh movie combo box
                 movieComboBox();
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | FileNotFoundException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }//GEN-LAST:event_AddMovieButtonActionPerformed
 
     private void MovieTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieTableMouseClicked
@@ -863,6 +907,21 @@ public class StaffMenu extends javax.swing.JFrame {
         menuDescription.setText("");
         menuPrice.setText("");
     }//GEN-LAST:event_addMenuButtonActionPerformed
+
+    private void browseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseImageActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.IMAGE", "jpg", "gif", "png");
+        fileChooser.addChoosableFileFilter(filter);
+        int result = fileChooser.showSaveDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fileChooser.getSelectedFile();
+            String path = selectedFile.getAbsolutePath();
+            imagelabel.setIcon(ResizeImage(path, imagelabel));
+            p = path;
+        }
+        else if(result == JFileChooser.CANCEL_OPTION){}
+    }//GEN-LAST:event_browseImageActionPerformed
 
     /**
      * @param args the command line arguments
@@ -989,7 +1048,7 @@ public class StaffMenu extends javax.swing.JFrame {
                          "FROM ((((((bookdetail\n" +
                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
-                         "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                         "LEFT JOIN food ON booking.fbid = food.fbid)\n" +
                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
                          "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
@@ -1044,7 +1103,7 @@ public class StaffMenu extends javax.swing.JFrame {
                          "FROM (((((bookdetail\n" +
                          "INNER JOIN booking ON bookdetail.bookid = booking.bookid )\n" +
                          "INNER JOIN seat ON bookdetail.seatid = seat.seatid)\n" +
-                         "INNER JOIN food ON booking.fbid = food.fbid)\n" +
+                         "LEFT JOIN food ON booking.fbid = food.fbid)\n" +
                          "INNER JOIN customer ON booking.ic = customer.ic)\n" +
                          "INNER JOIN shows ON seat.showid = shows.showid)\n" +
                          "WHERE shows.showid = '" + showid + "';";
@@ -1112,6 +1171,14 @@ public class StaffMenu extends javax.swing.JFrame {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public ImageIcon ResizeImage(String imgPath, JLabel imagelabel){
+        ImageIcon MyImage = new ImageIcon(imgPath);
+        Image img = MyImage.getImage();
+        Image newImage = img.getScaledInstance(imagelabel.getWidth(), imagelabel.getHeight(),Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImage);
+        return image;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddMovieButton;
@@ -1124,10 +1191,12 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton RemoveSelectedShowButton;
     private javax.swing.JTable ShowTable;
     private javax.swing.JButton addMenuButton;
+    private javax.swing.JButton browseImage;
     private javax.swing.JTextArea casts1;
     private javax.swing.JToggleButton deletemenu;
     private javax.swing.JTextField duration1;
     private javax.swing.JTable fnbtable;
+    private javax.swing.JLabel imagelabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
