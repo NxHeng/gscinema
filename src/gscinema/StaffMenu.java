@@ -707,90 +707,87 @@ public class StaffMenu extends javax.swing.JFrame {
                 
                 //check shows overlapping
                 Statement stm = db.getConnection().createStatement();
-                String sql = "SELECT * FROM shows WHERE theatreid = '" + theatreid + "' AND showdate = '" + date + "' AND '" + time + "'";
+                String sql = "SELECT * FROM shows WHERE theatreid = '" + theatreid + "' AND showdate = '" + date + "' AND showtime = '" + time + "'";
                 ResultSet rs2 = stm.executeQuery(sql);
-                if (rs2.next()){
-                    String temp = String.valueOf(rs2.getInt("showid"));
-                    if(temp != null){
-                        JOptionPane.showMessageDialog(this, "Unavailable");
-                        refreshShows(tblModel);
-                        return;
-                    }
-                }
-                
-                String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
-                "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
-                PreparedStatement ps = db.getConnection().prepareStatement(sql3,Statement.RETURN_GENERATED_KEYS);
-                ps.execute();
-                ResultSet rs = ps.getGeneratedKeys();
-                while(rs.next()){
-                    showid = String.valueOf(rs.getInt(1));
-                }
 
-                JOptionPane.showMessageDialog(this, "The show added succesfully");
-
-                //GENERATE TICKETS FOR ALL SEATS
-                //Identify the size of theatre
-                String temp = (String) theatre3.getSelectedItem();
-                String theatresize;
-                //exp -> 1 (30)  //  2 (100)  //  11 (50)    //    13 (100)
-                //       0123456     01234567     01234567         012345678
-                if(temp.substring(2,3).equals(" ") && temp.substring(7, 8).equals(")")){
-                    theatresize = temp.substring(4, 7);
-                }
-                else if(temp.substring(2,3).equals(" ") && temp.substring(6, 7).equals(")")){
-                    theatresize = temp.substring(4, 6);
-                }
-                else if(temp.substring(1, 2).equals(" ") && temp.substring(6, 7).equals(")")){
-                    theatresize = temp.substring(3, 6);
+                if(rs2.next()){
+                    JOptionPane.showMessageDialog(this, "Unavailable");
                 }
                 else{
-                    theatresize = temp.substring(3, 5);
-                }
-
-                int size = Integer.parseInt(theatresize);
-                char finalrow = 'E';
-                String[] seatnum = new String[size];
-                switch(size){
-                    case 50 -> finalrow = 'E';
-                    case 70 -> finalrow = 'G';
-                    case 90 -> finalrow = 'I';
-                }
-                int count = 0;
-                for(char a = 'A'; a <= finalrow; a++){
-                    for(int i = 1; i <= 10; i++){
-                        if(count == size){
-                            break;
-                        }
-                        seatnum[count] = a + String.valueOf(i);
-                        count++;
+                    String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
+                    "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
+                    PreparedStatement ps = db.getConnection().prepareStatement(sql3,Statement.RETURN_GENERATED_KEYS);
+                    ps.execute();
+                    ResultSet rs = ps.getGeneratedKeys();
+                    while(rs.next()){
+                        showid = String.valueOf(rs.getInt(1));
                     }
-                }
 
-                String status = "Available";
-                for(int i = 0; i < size; i++){
-                    Statement stmt2 = db.getConnection().createStatement();
-                    String sql2 = "INSERT INTO seat (showid, seatnum, status) VALUES('" + showid + "', '" + seatnum[i] + "', '" + status + "');";
-                    stmt2.executeUpdate(sql2);
-                }
+                    JOptionPane.showMessageDialog(this, "The show added succesfully");
 
-                //CLEAR FILLS
-                movie3.setSelectedIndex(0);
-                theatre3.setSelectedIndex(0);
-                //set to default date after adding a show
-                try {
-                    Date temp2 = new Date();
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyy");
-                    String tempdate = sdf2.format(temp2);
-                    Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
-                    sdate3.setDate(current);
-                } catch (ParseException ex) {
-                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                stime3.setText("");
+                    //GENERATE TICKETS FOR ALL SEATS
+                    //Identify the size of theatre
+                    String temp = (String) theatre3.getSelectedItem();
+                    String theatresize;
+                    //exp -> 1 (30)  //  2 (100)  //  11 (50)    //    13 (100)
+                    //       0123456     01234567     01234567         012345678
+                    if(temp.substring(2,3).equals(" ") && temp.substring(7, 8).equals(")")){
+                        theatresize = temp.substring(4, 7);
+                    }
+                    else if(temp.substring(2,3).equals(" ") && temp.substring(6, 7).equals(")")){
+                        theatresize = temp.substring(4, 6);
+                    }
+                    else if(temp.substring(1, 2).equals(" ") && temp.substring(6, 7).equals(")")){
+                        theatresize = temp.substring(3, 6);
+                    }
+                    else{
+                        theatresize = temp.substring(3, 5);
+                    }
 
-                //REFRESH TABLE
-                refreshShows(tblModel);
+                    int size = Integer.parseInt(theatresize);
+                    char finalrow = 'E';
+                    String[] seatnum = new String[size];
+                    switch(size){
+                        case 50 -> finalrow = 'E';
+                        case 70 -> finalrow = 'G';
+                        case 90 -> finalrow = 'I';
+                    }
+                    int count = 0;
+                    for(char a = 'A'; a <= finalrow; a++){
+                        for(int i = 1; i <= 10; i++){
+                            if(count == size){
+                                break;
+                            }
+                            seatnum[count] = a + String.valueOf(i);
+                            count++;
+                        }
+                    }
+
+                    String status = "Available";
+                    for(int i = 0; i < size; i++){
+                        Statement stmt2 = db.getConnection().createStatement();
+                        String sql2 = "INSERT INTO seat (showid, seatnum, status) VALUES('" + showid + "', '" + seatnum[i] + "', '" + status + "');";
+                        stmt2.executeUpdate(sql2);
+                    }
+
+                    //CLEAR FILLS
+                    movie3.setSelectedIndex(0);
+                    theatre3.setSelectedIndex(0);
+                    //set to default date after adding a show
+                    try {
+                        Date temp2 = new Date();
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyy");
+                        String tempdate = sdf2.format(temp2);
+                        Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
+                        sdate3.setDate(current);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    stime3.setText("");
+
+                    //REFRESH TABLE
+                    refreshShows(tblModel);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
