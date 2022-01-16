@@ -52,6 +52,12 @@ public class StaffMenu extends javax.swing.JFrame {
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
+        ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\GSC-Cinema-Vector-Logo.png");
+        Image img = icon.getImage();
+        Image imgScale = img.getScaledInstance(GSCTitle.getWidth(), GSCTitle.getHeight(),Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(imgScale);
+        GSCTitle.setIcon(scaledIcon);
+        
         //welcome text
         welcomestaff.setText(stf.getName() + " (Staff)");
         
@@ -117,7 +123,7 @@ public class StaffMenu extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         LogoutButton = new javax.swing.JButton();
-        GCStitle = new javax.swing.JLabel();
+        GSCTitle = new javax.swing.JLabel();
         welcomestaff = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -182,9 +188,8 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
 
-        GCStitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        GCStitle.setText("GSCinema");
-        GCStitle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        GSCTitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        GSCTitle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         welcomestaff.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         welcomestaff.setText("(Staff)");
@@ -195,7 +200,7 @@ public class StaffMenu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(GCStitle)
+                .addComponent(GSCTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -204,12 +209,13 @@ public class StaffMenu extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(GCStitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(LogoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(welcomestaff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(GSCTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LogoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         MovieTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -399,7 +405,7 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(AddMovieButton)
                             .addComponent(refreshMovieTableButton)
                             .addComponent(ClearAddMovieFieldsButton))
-                        .addContainerGap(18, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jTabbedPane1.addTab("Edit Movies", jPanel2);
@@ -509,7 +515,7 @@ public class StaffMenu extends javax.swing.JFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(RemoveSelectedShowButton)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Edit Shows", jPanel4);
@@ -613,7 +619,7 @@ public class StaffMenu extends javax.swing.JFrame {
                             .addComponent(menuPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(addMenuButton)))
-                .addContainerGap(240, Short.MAX_VALUE))
+                .addContainerGap(228, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Food and Beverages", jPanel5);
@@ -1253,7 +1259,7 @@ public class StaffMenu extends javax.swing.JFrame {
     private javax.swing.JButton AddMovieButton;
     private javax.swing.JButton AddShowButton;
     private javax.swing.JButton ClearAddMovieFieldsButton;
-    private javax.swing.JLabel GCStitle;
+    private javax.swing.JLabel GSCTitle;
     private javax.swing.JButton LogoutButton;
     private javax.swing.JTable MovieTable;
     private javax.swing.JButton RemoveSelectedMovieButton;
