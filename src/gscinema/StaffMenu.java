@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -711,83 +713,145 @@ public class StaffMenu extends javax.swing.JFrame {
                 ResultSet rs2 = stm.executeQuery(sql);
 
                 if(rs2.next()){
-                    JOptionPane.showMessageDialog(this, "Unavailable");
+                    JOptionPane.showMessageDialog(this, "Start time is between a show");
+                    return;
                 }
-                else{
-                    String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
-                    "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
-                    PreparedStatement ps = db.getConnection().prepareStatement(sql3,Statement.RETURN_GENERATED_KEYS);
-                    ps.execute();
-                    ResultSet rs = ps.getGeneratedKeys();
-                    while(rs.next()){
-                        showid = String.valueOf(rs.getInt(1));
-                    }
-
-                    JOptionPane.showMessageDialog(this, "The show added succesfully");
-
-                    //GENERATE TICKETS FOR ALL SEATS
-                    //Identify the size of theatre
-                    String temp = (String) theatre3.getSelectedItem();
-                    String theatresize;
-                    //exp -> 1 (30)  //  2 (100)  //  11 (50)    //    13 (100)
-                    //       0123456     01234567     01234567         012345678
-                    if(temp.substring(2,3).equals(" ") && temp.substring(7, 8).equals(")")){
-                        theatresize = temp.substring(4, 7);
-                    }
-                    else if(temp.substring(2,3).equals(" ") && temp.substring(6, 7).equals(")")){
-                        theatresize = temp.substring(4, 6);
-                    }
-                    else if(temp.substring(1, 2).equals(" ") && temp.substring(6, 7).equals(")")){
-                        theatresize = temp.substring(3, 6);
-                    }
-                    else{
-                        theatresize = temp.substring(3, 5);
-                    }
-
-                    int size = Integer.parseInt(theatresize);
-                    char finalrow = 'E';
-                    String[] seatnum = new String[size];
-                    switch(size){
-                        case 50 -> finalrow = 'E';
-                        case 70 -> finalrow = 'G';
-                        case 90 -> finalrow = 'I';
-                    }
-                    int count = 0;
-                    for(char a = 'A'; a <= finalrow; a++){
-                        for(int i = 1; i <= 10; i++){
-                            if(count == size){
-                                break;
-                            }
-                            seatnum[count] = a + String.valueOf(i);
-                            count++;
+                
+                
+                Statement stm3 = db.getConnection().createStatement();
+                String sql0 = "SELECT *\n" +
+                              "FROM ((shows\n" +
+                              "INNER JOIN movie ON shows.movieid = movie.movieid )\n" +
+                              "INNER JOIN theatre ON shows.theatreid = theatre.theatreid)\n" +
+                              "WHERE shows.theatreid = '" + theatreid + "' AND showdate = '" + date + "';";
+                ResultSet rs3 = stm3.executeQuery(sql0);    
+                while(rs3.next()){
+                    String showtime = rs3.getString("shows.showtime");
+                    String durationStr = rs3.getString("movie.duration");
+                    int i;
+                    for(i = 0; i < durationStr.length(); i++){
+                        if(Character.isDigit(durationStr.charAt(i)) == false){
+                            break;
                         }
                     }
+                    String duration = durationStr.substring(0, i);
 
-                    String status = "Available";
-                    for(int i = 0; i < size; i++){
-                        Statement stmt2 = db.getConnection().createStatement();
-                        String sql2 = "INSERT INTO seat (showid, seatnum, status) VALUES('" + showid + "', '" + seatnum[i] + "', '" + status + "');";
-                        stmt2.executeUpdate(sql2);
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
+
+                    LocalTime start = LocalTime.parse(showtime, format);
+                    LocalTime end = start.plusMinutes(Integer.parseInt(duration));
+
+                    LocalTime start2 = LocalTime.parse(time, format);
+                    
+                    Statement stm4 = db.getConnection().createStatement();
+                    String sql4 = "SELECT * FROM movie where movieid = '" + movieid + "'";
+                    ResultSet rs4 = stm4.executeQuery(sql4);
+                    String durationStr2 = "";
+                    while(rs4.next()){
+                        durationStr2 = rs4.getString("movie.duration");
                     }
-
-                    //CLEAR FILLS
-                    movie3.setSelectedIndex(0);
-                    theatre3.setSelectedIndex(0);
-                    //set to default date after adding a show
-                    try {
-                        Date temp2 = new Date();
-                        SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyy");
-                        String tempdate = sdf2.format(temp2);
-                        Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
-                        sdate3.setDate(current);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+                    int j;
+                    for(j = 0; j < durationStr2.length(); j++){
+                        if(Character.isDigit(durationStr2.charAt(j)) == false){
+                            break;
+                        }
                     }
-                    stime3.setText("");
-
-                    //REFRESH TABLE
-                    refreshShows(tblModel);
+                    String duration2 = durationStr2.substring(0, j);
+                    
+        
+                    LocalTime end2 = start2.plusMinutes(Integer.parseInt(duration2));
+                    //conditions for unavailable
+//                         
+//            -------->        start               end
+//                                        start               end              X
+//                                  start      end                             X
+//                    start               end                                  X
+//                    
+                    if(start2.isAfter(start) == true && start2.isBefore(end) == true){
+                        JOptionPane.showMessageDialog(this, "Start time is between a show");
+                        return;
+                    }
+                    else if(end2.isAfter(start) == true && end2.isBefore(end) == true){
+                        JOptionPane.showMessageDialog(this, "End time is between a show");
+                        return;
+                    }
+                }    
+                
+                
+                String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
+                "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
+                PreparedStatement ps = db.getConnection().prepareStatement(sql3,Statement.RETURN_GENERATED_KEYS);
+                ps.execute();
+                ResultSet rs = ps.getGeneratedKeys();
+                while(rs.next()){
+                    showid = String.valueOf(rs.getInt(1));
                 }
+
+                JOptionPane.showMessageDialog(this, "The show added succesfully");
+
+                //GENERATE TICKETS FOR ALL SEATS
+                //Identify the size of theatre
+                String temp = (String) theatre3.getSelectedItem();
+                String theatresize;
+                //exp -> 1 (30)  //  2 (100)  //  11 (50)    //    13 (100)
+                //       0123456     01234567     01234567         012345678
+                if(temp.substring(2,3).equals(" ") && temp.substring(7, 8).equals(")")){
+                    theatresize = temp.substring(4, 7);
+                }
+                else if(temp.substring(2,3).equals(" ") && temp.substring(6, 7).equals(")")){
+                    theatresize = temp.substring(4, 6);
+                }
+                else if(temp.substring(1, 2).equals(" ") && temp.substring(6, 7).equals(")")){
+                    theatresize = temp.substring(3, 6);
+                }
+                else{
+                    theatresize = temp.substring(3, 5);
+                }
+
+                int size = Integer.parseInt(theatresize);
+                char finalrow = 'E';
+                String[] seatnum = new String[size];
+                switch(size){
+                    case 50 -> finalrow = 'E';
+                    case 70 -> finalrow = 'G';
+                    case 90 -> finalrow = 'I';
+                }
+                int count = 0;
+                for(char a = 'A'; a <= finalrow; a++){
+                    for(int i = 1; i <= 10; i++){
+                        if(count == size){
+                            break;
+                        }
+                        seatnum[count] = a + String.valueOf(i);
+                        count++;
+                    }
+                }
+
+                String status = "Available";
+                for(int i = 0; i < size; i++){
+                    Statement stmt2 = db.getConnection().createStatement();
+                    String sql2 = "INSERT INTO seat (showid, seatnum, status) VALUES('" + showid + "', '" + seatnum[i] + "', '" + status + "');";
+                    stmt2.executeUpdate(sql2);
+                }
+
+                //CLEAR FILLS
+                movie3.setSelectedIndex(0);
+                theatre3.setSelectedIndex(0);
+                //set to default date after adding a show
+                try {
+                    Date temp2 = new Date();
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyy");
+                    String tempdate = sdf2.format(temp2);
+                    Date current = new SimpleDateFormat("dd-MM-yyy").parse(tempdate);
+                    sdate3.setDate(current);
+                } catch (ParseException ex) {
+                    Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                stime3.setText("");
+
+                //REFRESH TABLE
+                refreshShows(tblModel);
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -857,6 +921,12 @@ public class StaffMenu extends javax.swing.JFrame {
                 refreshMovie(tblModel);
             }
             else{
+                if(valDuration(duration2) == false){
+                    JOptionPane.showMessageDialog(this, "Invalid Duration Format");
+                    refreshMovie(tblModel);
+                    return;
+                }
+                
                 if(valPrice(price2) == false || price2.equals("0")){
                     JOptionPane.showMessageDialog(this, "Invalid Price Format");
                     refreshMovie(tblModel);
@@ -1248,6 +1318,13 @@ public class StaffMenu extends javax.swing.JFrame {
         String priceRegex = "^\\d{1,2}$";
         Pattern pricePat = Pattern.compile(priceRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pricePat.matcher(price);
+        return matcher.find();
+    }
+    
+    public static boolean valDuration(String duration){
+        String durationRegex = "\\d{1,3}\\s[A-Z]{7}$";
+        Pattern durationPat = Pattern.compile(durationRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = durationPat.matcher(duration);
         return matcher.find();
     }
     
