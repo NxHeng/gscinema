@@ -70,7 +70,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         //Maximize the frame (Full screen)
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        //GSC Logo
+        //GSC Logo PLEASE CHANGE THE PATH
         ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\src\\gscinema\\GSC-Cinema-Vector-Logo.png");
         Image img = icon.getImage();
         Image imgScale = img.getScaledInstance(GSCTitle.getWidth(), GSCTitle.getHeight(),Image.SCALE_SMOOTH);
@@ -166,12 +166,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         studentemail.setEnabled(false);
         studentid.setEnabled(false);
         
-//        ImageIcon image = new ImageIcon(getClass().getResource("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\resources\\Payment_Successful_.png"));
-//        Image scaledImage = image.getScaledInstance(qrcode.getWidth(),qrcode.getHeight(),Image.SCALE_SMOOTH);
-//        qrcode = new JLabel((Icon) scaledImage);
-
-        //scaledImage();
-                
     }
 
     /**
@@ -1297,8 +1291,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         }
         //disable book button
         bookbutton.setEnabled(false);
-        //disable showtable
-        //ShowTable.setEnabled(false);
         
         //change the displayPanel to Food and Beverage Panel (after customer choose seats)
         //Method (Refer below)
@@ -2198,6 +2190,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         
         //QR Code
         GenerateQRCode qr = new GenerateQRCode(movietitle, cus.getName(), bookid, theatre, showdate, showtime, seat);
+        //PLEASE CHANGE THE PATH (same as the path in GenerateQRCode class)
         ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Pictures\\Java\\qrcode.png");
         Image img = icon.getImage();
         Image imgScale = img.getScaledInstance(QR.getWidth(), QR.getHeight(),Image.SCALE_SMOOTH);

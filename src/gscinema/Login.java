@@ -27,6 +27,7 @@ public class Login extends javax.swing.JFrame {
         db.connect();
         initComponents();
         
+        //GSC Logo PLEASE CHANGE THE PATH
         ImageIcon icon = new ImageIcon("C:\\Users\\e-hen\\Documents\\NetBeansProjects\\GSCinema\\src\\gscinema\\GSC-Cinema-Vector-Logo.png");
         Image img = icon.getImage();
         Image imgScale = img.getScaledInstance(GSCTitle.getWidth(), GSCTitle.getHeight(),Image.SCALE_SMOOTH);

@@ -31,7 +31,7 @@ public class GenerateQRCode  {
                         "Show Time: " + showtime + "\n" +
                         "Seat(s): " + seat + "\n";
 
-            //path where we want to get QR Code
+            //path where we want to get QR Code PLEASE CHANGE THE PATH
             String path = "C:\\Users\\e-hen\\Pictures\\Java\\qrcode.png";
             //Encoding charset to be used
             String charset = "UTF-8";
