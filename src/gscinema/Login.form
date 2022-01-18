@@ -254,7 +254,7 @@
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Comfirm Password:"/>
+                <Property name="text" type="java.lang.String" value="Confirm Password:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JPasswordField" name="cuscpassword">
@@ -565,7 +565,7 @@
             <Component class="javax.swing.JLabel" name="staffnamelabel4">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Comfirm Password:"/>
+                <Property name="text" type="java.lang.String" value="Confirm Password:"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>

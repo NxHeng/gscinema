@@ -178,7 +178,7 @@ public class Login extends javax.swing.JFrame {
         });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("Comfirm Password:");
+        jLabel5.setText("Confirm Password:");
 
         cuscpassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -354,7 +354,7 @@ public class Login extends javax.swing.JFrame {
         });
 
         staffnamelabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        staffnamelabel4.setText("Comfirm Password:");
+        staffnamelabel4.setText("Confirm Password:");
         staffnamelabel4.setToolTipText("");
 
         staffcpassword.addActionListener(new java.awt.event.ActionListener() {
