@@ -103,6 +103,8 @@ public class CustomerMenu extends javax.swing.JFrame {
             for (String i : movieItems) {
                 MovieList.addItem(i);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,6 +125,8 @@ public class CustomerMenu extends javax.swing.JFrame {
             for (String i : timeList) {
                 TimeList.addItem(i);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,6 +158,8 @@ public class CustomerMenu extends javax.swing.JFrame {
             for (String i : foodlist) {
                 fbsetlist.addItem(i);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -162,7 +168,6 @@ public class CustomerMenu extends javax.swing.JFrame {
         displayProfile(cus);
         // disable the print receipt button at the profile tab (default) 
         printReceipt2.setEnabled(false);
-        
         studentemail.setEnabled(false);
         studentid.setEnabled(false);
         
@@ -587,35 +592,34 @@ public class CustomerMenu extends javax.swing.JFrame {
         ConfirmationPanelLayout.setHorizontalGroup(
             ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ConfirmationPanelLayout.createSequentialGroup()
-                .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(fbquantitydisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
-                    .addComponent(fbsetdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(seatsdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(movietypedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(unitpricedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(showtimedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(showdatedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(theatreiddisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(titledisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmationPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(totalpricedisplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(ConfirmationPanelLayout.createSequentialGroup()
-                        .addComponent(studentcheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ConfirmationPanelLayout.createSequentialGroup()
+                        .addComponent(studentcheckbox, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ProceedPaymentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(studentemail, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(backtofnbbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                            .addComponent(ProceedPaymentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(studentemail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(backtofnbbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel35)
                         .addGap(7, 7, 7)
-                        .addComponent(studentid, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(21, 21, 21))
+                        .addComponent(studentid, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ConfirmationPanelLayout.createSequentialGroup()
+                        .addGroup(ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(totalpricedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fbquantitydisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 787, Short.MAX_VALUE)
+                            .addComponent(fbsetdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(seatsdisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(movietypedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(unitpricedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(showtimedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(showdatedisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(theatreiddisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(titledisplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         ConfirmationPanelLayout.setVerticalGroup(
             ConfirmationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -781,10 +785,11 @@ public class CustomerMenu extends javax.swing.JFrame {
                     .addComponent(printReceipt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                    .addComponent(qrcodelabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(qrcodelabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         ReceiptPanelLayout.setVerticalGroup(
             ReceiptPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1084,13 +1089,13 @@ public class CustomerMenu extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 976, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(BookedTicketsPanelLayout.createSequentialGroup()
-                        .addGroup(BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(eticketlabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(qrcodelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-                    .addComponent(printReceipt2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(printReceipt2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(BookedTicketsPanelLayout.createSequentialGroup()
+                        .addGroup(BookedTicketsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(qrcodelabel, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(eticketlabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         BookedTicketsPanelLayout.setVerticalGroup(
@@ -1337,6 +1342,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 unitprice = (double) rs.getDouble("movie.price");
                 movietypedisplay.setText("Type: " + rs.getString("movie.movietype"));   
             }
+            stm.close();
+            rs.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1351,7 +1358,6 @@ public class CustomerMenu extends javax.swing.JFrame {
     private void DisplayAllShowsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DisplayAllShowsButtonActionPerformed
         //back to default view (METHOD)
         backToDefaultView();
-        
         //clear and display table (METHOD)
         DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
         displayShows(tblModel);
@@ -1447,6 +1453,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                     // refresh the seat panel.
                     seatpanel.updateUI();
                 }
+                stm.close();
+                rs.close();
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1489,6 +1497,8 @@ public class CustomerMenu extends javax.swing.JFrame {
             while(rs.next()){
                 showid = String.valueOf(rs.getInt("showid"));
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1504,6 +1514,8 @@ public class CustomerMenu extends javax.swing.JFrame {
             while(rs1.next()){
                 size = rs1.getInt("size");
             }
+            stm1.close();
+            rs1.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1551,6 +1563,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                             status = rs2.getString("status");
                             selectedseatid = rs2.getInt("seatid");
                         }
+                        stm2.close();
+                        rs2.close();
                         
                         // based on the seat id, we get the price of the seat/ticket
                         Statement stm4 = db.getConnection().createStatement();
@@ -1562,6 +1576,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                         while(rs4.next()){
                             price_select = rs4.getInt("movie.price");
                         }
+                        stm4.close();
+                        rs4.close();
                     } catch (SQLException ex) {
                         Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1637,6 +1653,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 imagelabel.setIcon(poster);
                 
             }
+            stm3.close();
+            rs3.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1693,6 +1711,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 while(rs.next()){
                     foodid = rs.getInt("fbid");
                 }
+                stm.close();
+                rs.close();
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1730,6 +1750,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 //display unit price
                 fbunitprice.setText(String.format("RM%4.2f", (double)rs.getInt("price")));
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1742,15 +1764,18 @@ public class CustomerMenu extends javax.swing.JFrame {
         // if the student check box is selected (ticked) but didnt fill in the blanks, then display 'please...'
         if(studentcheckbox.isSelected() && (studentemail.getText().equals("") || studentid.getText().equals(""))){
             JOptionPane.showMessageDialog(this, "Please fill in the blanks");
+            return;
         }//if information complete then proceed to 
         else if(studentcheckbox.isSelected() && !studentemail.getText().equals("") && !studentid.getText().equals("")){
             if(valEmail(studentemail.getText()) == false){
+                studentemail.setText(null);
                 JOptionPane.showMessageDialog(this, "Invalid Email");
+                return;
             }
         }
-        else{
-                displayPanelChange(CardPaymentPanel);
-        }
+        
+        displayPanelChange(CardPaymentPanel);
+        
     }//GEN-LAST:event_ProceedPaymentButtonActionPerformed
 
     private void PayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PayButtonActionPerformed
@@ -1804,6 +1829,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                         stm3.executeUpdate(sql3);
                     }
                 }
+                ps.close();
+                rs.close();
                 JOptionPane.showMessageDialog(this, "Payment Succesful");
             } catch (SQLException ex) {
                 Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
@@ -1902,8 +1929,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                              "SET email= '" + cus.getEmail() + "'\n" +
                              "WHERE ic = '" + cus.getIc() + "';";
                 stm.executeUpdate(sql);
+                stm.close();
                 JOptionPane.showMessageDialog(this, "Email update successful");
-                System.out.println(cus.getEmail());
             }
             //update phone
             if(!pfphone.getText().isEmpty() && !cus.getPhone().equals(pfphone.getText())){
@@ -1917,8 +1944,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                               "SET mobile_num = '" + cus.getPhone()+ "'\n" +
                               "WHERE ic = '" + cus.getIc() + "';";
                 stm2.executeUpdate(sql2);
+                stm2.close();
                 JOptionPane.showMessageDialog(this, "Phone number update successful");
-                System.out.println(cus.getPhone());
             }
             //update password
             if(!currentpassword.getText().isEmpty() && !newpassword.getText().isEmpty() && !confirmpassword.getText().isEmpty()){
@@ -1938,8 +1965,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                                   "SET cus_password = '" + cus.getPassword()+ "'\n" +
                                   "WHERE ic = '" + cus.getIc() + "';";
                     stm3.executeUpdate(sql3);
+                    stm3.close();
                     JOptionPane.showMessageDialog(this, "Update successful");
-                    System.out.println(cus.getPassword());
                 }
             }
             else if(!currentpassword.getText().isEmpty() && (newpassword.getText().isEmpty() || confirmpassword.getText().isEmpty())){
@@ -2038,6 +2065,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 String tbData[] = {theatre, title, sdate, stime, price, type};
                 tblModel.addRow(tbData);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2078,7 +2107,9 @@ public class CustomerMenu extends javax.swing.JFrame {
                 
                 String tbData[] = {bookid, title, theatre, seatnum, sdate, stime, price};
                 tblModel.addRow(tbData);
-            } 
+            }
+            stm1.close();
+            rs1.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2167,6 +2198,8 @@ public class CustomerMenu extends javax.swing.JFrame {
                 }
                 totalprice = rs.getDouble("booking.totalprice");
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
              Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }

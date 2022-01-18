@@ -107,6 +107,8 @@ public class StaffMenu extends javax.swing.JFrame {
             for(String item : combine){
                 theatre3.addItem(item);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -715,6 +717,8 @@ public class StaffMenu extends javax.swing.JFrame {
 
                 if(rs2.next()){
                     JOptionPane.showMessageDialog(this, "Start time is between a show");
+                    stm.close();
+                    rs2.close();
                     return;
                 }
                 
@@ -777,7 +781,8 @@ public class StaffMenu extends javax.swing.JFrame {
                         return;
                     }
                 }    
-                
+                stm3.close();
+                rs3.close();
                 
                 String sql3 = "INSERT INTO SHOWS (movieid, theatreid, showdate, showtime) VALUES "+
                 "('" + movieid + "', '" + theatreid + "', '" + date + "', '" + time + "');";
@@ -787,7 +792,8 @@ public class StaffMenu extends javax.swing.JFrame {
                 while(rs.next()){
                     showid = String.valueOf(rs.getInt(1));
                 }
-
+                ps.close();
+                rs.close();
                 JOptionPane.showMessageDialog(this, "The show added succesfully");
 
                 //GENERATE TICKETS FOR ALL SEATS
@@ -833,6 +839,7 @@ public class StaffMenu extends javax.swing.JFrame {
                     Statement stmt2 = db.getConnection().createStatement();
                     String sql2 = "INSERT INTO seat (showid, seatnum, status) VALUES('" + showid + "', '" + seatnum[i] + "', '" + status + "');";
                     stmt2.executeUpdate(sql2);
+                    stmt2.close();
                 }
 
                 //CLEAR FILLS
@@ -952,6 +959,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 ps.setString(7, type2);
                 ps.setBlob(8, is);   
                 ps.executeUpdate();
+                ps.close();
                 JOptionPane.showMessageDialog(this, "The movie added succesfully");
 
                 //clear fill
@@ -1023,6 +1031,7 @@ public class StaffMenu extends javax.swing.JFrame {
                 Statement stm = db.getConnection().createStatement();
                 String sql = "INSERT INTO food (fbname, description, price) VALUES ('" + menuname + "', '" + menudescription + "', '" + menuprice + "')";
                 stm.executeUpdate(sql);
+                stm.close();
             }
             
         } catch (SQLException ex) {
@@ -1103,6 +1112,8 @@ public class StaffMenu extends javax.swing.JFrame {
                 String tbData[] = {movieid, title, rdate, casts, synopsis, duration, price, type};
                 tblModel.addRow(tbData);
             }
+            stmt.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1139,6 +1150,8 @@ public class StaffMenu extends javax.swing.JFrame {
                 String tbData[] = {showid, movieid, title, theatre, size, sdate, stime, price, type};
                 tblModel.addRow(tbData);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1163,6 +1176,8 @@ public class StaffMenu extends javax.swing.JFrame {
             for(String item : combine){
                 movie3.addItem(item);
             }
+            stm.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(CustomerMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1189,12 +1204,16 @@ public class StaffMenu extends javax.swing.JFrame {
                 Statement stm1 = db.getConnection().createStatement();
                 String sql1 = "DELETE FROM bookdetail WHERE bookid = '" + bookid + "'";
                 stm1.executeUpdate(sql1);
+                stm1.close();
                 
                 //Delete booking
                 Statement stm2 = db.getConnection().createStatement();
                 String sql2 = "DELETE FROM booking WHERE bookid = '" + bookid + "'";
                 stm2.executeUpdate(sql2);
+                stm2.close();
             }
+            stm.close();
+            rs.close();
             
             //Delete seat
             Statement stm3 = db.getConnection().createStatement();
@@ -1204,6 +1223,7 @@ public class StaffMenu extends javax.swing.JFrame {
                           "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
                           "WHERE shows.movieid = '" + movieid + "';";
             stm3.executeUpdate(sql3);
+            stm3.close();
             
             //Delete shows
             Statement stm4 = db.getConnection().createStatement();
@@ -1212,12 +1232,13 @@ public class StaffMenu extends javax.swing.JFrame {
                           "INNER JOIN movie ON shows.movieid = movie.movieid)\n" +
                           "WHERE shows.movieid = '" + movieid + "';";
             stm4.executeUpdate(sql4);
+            stm4.close();
             
             //Delete movie
             Statement stm5 = db.getConnection().createStatement();
             String sql5 = "DELETE FROM movie WHERE movieid = '" + movieid + "';";
             stm5.executeUpdate(sql5);
-            
+            stm5.close();
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1243,12 +1264,16 @@ public class StaffMenu extends javax.swing.JFrame {
                 Statement stm1 = db.getConnection().createStatement();
                 String sql1 = "DELETE FROM bookdetail WHERE bookid = '" + bookid + "'";
                 stm1.executeUpdate(sql1);
+                stm1.close();
                 
                 //Delete booking
                 Statement stm2 = db.getConnection().createStatement();
                 String sql2 = "DELETE FROM booking WHERE bookid = '" + bookid + "'";
                 stm2.executeUpdate(sql2);
+                stm2.close();
             }
+            stm.close();
+            rs.close();
             
             //Delete seat
             Statement stm3 = db.getConnection().createStatement();
@@ -1257,12 +1282,13 @@ public class StaffMenu extends javax.swing.JFrame {
                           "INNER JOIN shows ON seat.showid = shows.showid)\n" +
                           "WHERE shows.showid = '" + showid + "';";
             stm3.executeUpdate(sql3);
+            stm3.close();
             
             //Delete shows
             Statement stm4 = db.getConnection().createStatement();
             String sql4 = "DELETE FROM shows WHERE showid = '" + showid + "'";
             stm4.executeUpdate(sql4);
-            
+            stm4.close();
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1284,6 +1310,8 @@ public class StaffMenu extends javax.swing.JFrame {
                 String tbData[] = {fbid, name, description, price};
                 tblModel.addRow(tbData);
             }
+            stm.close();
+            rs.close();
         }   catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1295,6 +1323,7 @@ public class StaffMenu extends javax.swing.JFrame {
             Statement stm = db.getConnection().createStatement();
             String sql = "DELETE FROM food WHERE fbid = '" + foodid + "'";
             stm.executeUpdate(sql);
+            stm.close();
         } catch (SQLException ex) {
             Logger.getLogger(StaffMenu.class.getName()).log(Level.SEVERE, null, ex);
         }

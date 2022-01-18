@@ -4,10 +4,9 @@
  */
 package gscinema;
 
+import java.sql.*;
 import java.awt.HeadlessException;
 import java.awt.Image;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -508,7 +507,6 @@ public class Login extends javax.swing.JFrame {
 
     private void customerloginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerloginbuttonActionPerformed
         try{
-            
             String ic = ic_num.getText();
             String pass = password.getText();
             
@@ -520,7 +518,7 @@ public class Login extends javax.swing.JFrame {
             
             ResultSet result = db.getConnection().prepareStatement(String.format("SELECT * FROM customer WHERE IC = '%s' AND CUS_PASSWORD = '%s'",
                 ic, pass)).executeQuery();
-            
+
             if(result.next()){
                 
                 //login set user personality
@@ -529,20 +527,20 @@ public class Login extends javax.swing.JFrame {
                 CustomerMenu menu = new CustomerMenu(cus,db);
                 menu.setVisible(true);
                 dispose();
+                result.close();
             }else{
                 //database not found
                 JOptionPane.showMessageDialog(this, "Wrong ic or password");
                 ic_num.setText("");
                 password.setText("");
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_customerloginbuttonActionPerformed
 
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_passwordActionPerformed
 
     private void customerregisterbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerregisterbuttonActionPerformed
@@ -584,6 +582,7 @@ public class Login extends javax.swing.JFrame {
             if(rs.next()){
                 //ic is registered
                 JOptionPane.showMessageDialog(this, "This account already exists");
+                rs.close();
             }
             else if (!pass.equals(cpass)){
                 //check password matching{
@@ -605,6 +604,7 @@ public class Login extends javax.swing.JFrame {
                     CustomerMenu menu = new CustomerMenu(cus, db);
                     menu.setVisible(true);
                     dispose();
+                    result.close();
                 }
                 else{
                     System.out.println("Error");
@@ -617,11 +617,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_customerregisterbuttonActionPerformed
 
     private void cuscpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuscpasswordActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_cuscpasswordActionPerformed
 
     private void cuspasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuspasswordActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_cuspasswordActionPerformed
 
     private void staffloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffloginActionPerformed
@@ -646,17 +644,17 @@ public class Login extends javax.swing.JFrame {
                 StaffMenu menu = new StaffMenu(stf, db);
                 menu.setVisible(true);
                 dispose();
+                result.close();
             }else{
                 //database not found
                 JOptionPane.showMessageDialog(this, "Wrong id or password");
                 staffid.setText("");
                 staffpassword.setText("");
             }
-
+            
         }catch(HeadlessException | SQLException e){
             System.out.println(e.getMessage());
         }
-
     }//GEN-LAST:event_staffloginActionPerformed
 
     private void staffregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffregisterActionPerformed
@@ -686,6 +684,7 @@ public class Login extends javax.swing.JFrame {
             if(rs.next()){
                 //id is registered
                 JOptionPane.showMessageDialog(this, "This account already exists");
+                rs.close();
             }
             else if (!pass.equals(cpass)){
                 //check password matching{
@@ -708,6 +707,7 @@ public class Login extends javax.swing.JFrame {
                     StaffMenu sm = new StaffMenu(stf, db);
                     sm.setVisible(true);
                     dispose();
+                    result.close();
                 }
                 else{
                     System.out.println("Error");

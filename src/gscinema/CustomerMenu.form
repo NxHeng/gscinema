@@ -538,41 +538,40 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="fbquantitydisplay" alignment="0" pref="787" max="32767" attributes="0"/>
-                                  <Component id="fbsetdisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="seatsdisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="movietypedisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="unitpricedisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="showtimedisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="showdatedisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="theatreiddisplay" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="titledisplay" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="totalpricedisplay" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="studentcheckbox" min="-2" pref="196" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="studentcheckbox" pref="190" max="32767" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jLabel34" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="ProceedPaymentButton" max="32767" attributes="0"/>
-                                          <Component id="studentemail" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="backtofnbbutton" pref="228" max="32767" attributes="0"/>
+                                          <Component id="ProceedPaymentButton" min="-2" pref="228" max="-2" attributes="0"/>
+                                          <Component id="studentemail" alignment="1" min="-2" pref="228" max="-2" attributes="0"/>
+                                          <Component id="backtofnbbutton" min="-2" pref="228" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                                      <Component id="studentid" min="-2" pref="179" max="-2" attributes="0"/>
+                                      <Component id="studentid" min="-2" pref="194" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="totalpricedisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="fbquantitydisplay" alignment="0" pref="787" max="32767" attributes="0"/>
+                                          <Component id="fbsetdisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="seatsdisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="movietypedisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="unitpricedisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="showtimedisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="showdatedisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="theatreiddisplay" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="titledisplay" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -906,11 +905,12 @@
                                   <Component id="jScrollPane6" pref="501" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jLabel6" max="32767" attributes="0"/>
                                   <Component id="jButton1" max="32767" attributes="0"/>
-                                  <Component id="jLabel6" alignment="0" pref="281" max="32767" attributes="0"/>
-                                  <Component id="qrcodelabel2" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="qrcodelabel2" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1287,15 +1287,15 @@
                       <Component id="jScrollPane2" min="-2" pref="976" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="eticketlabel" max="32767" attributes="0"/>
+                          <Component id="jScrollPane7" pref="424" max="32767" attributes="0"/>
+                          <Component id="printReceipt2" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="qrcodelabel" min="-2" pref="199" max="-2" attributes="0"/>
+                                  <Component id="eticketlabel" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane7" pref="424" max="32767" attributes="0"/>
-                          <Component id="printReceipt2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
