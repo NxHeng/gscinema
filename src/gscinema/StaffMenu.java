@@ -247,6 +247,16 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(MovieTable);
+        if (MovieTable.getColumnModel().getColumnCount() > 0) {
+            MovieTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            MovieTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+            MovieTable.getColumnModel().getColumn(2).setPreferredWidth(45);
+            MovieTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+            MovieTable.getColumnModel().getColumn(4).setPreferredWidth(200);
+            MovieTable.getColumnModel().getColumn(5).setPreferredWidth(50);
+            MovieTable.getColumnModel().getColumn(6).setPreferredWidth(20);
+            MovieTable.getColumnModel().getColumn(7).setPreferredWidth(20);
+        }
 
         jLabel2.setText("Movie Title:");
 
@@ -548,6 +558,12 @@ public class StaffMenu extends javax.swing.JFrame {
             }
         });
         jScrollPane7.setViewportView(fnbtable);
+        if (fnbtable.getColumnModel().getColumnCount() > 0) {
+            fnbtable.getColumnModel().getColumn(0).setPreferredWidth(100);
+            fnbtable.getColumnModel().getColumn(1).setPreferredWidth(200);
+            fnbtable.getColumnModel().getColumn(2).setPreferredWidth(400);
+            fnbtable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        }
 
         deletemenu.setText("Delete Selected Menu");
         deletemenu.addActionListener(new java.awt.event.ActionListener() {
@@ -580,8 +596,8 @@ public class StaffMenu extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
-                    .addComponent(deletemenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(deletemenu, javax.swing.GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1019,7 +1035,7 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_fnbtableMouseClicked
 
     private void deletemenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletemenuActionPerformed
-        if(foodid_Remove==null){
+        if(foodid_Remove == null){
             JOptionPane.showMessageDialog(this, "No menu selected");
             return;
         }
