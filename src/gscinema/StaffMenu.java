@@ -655,6 +655,10 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
     private void RemoveSelectedShowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveSelectedShowButtonActionPerformed
+        if(showid_Remove==null){
+            JOptionPane.showMessageDialog(this, "No show selected");
+            return;
+        }
         DefaultTableModel tblModel3 = (DefaultTableModel)ShowTable.getModel();
         deleteShows(showid_Remove);
         refreshShows(tblModel3);
@@ -664,7 +668,14 @@ public class StaffMenu extends javax.swing.JFrame {
         DefaultTableModel tblModel = (DefaultTableModel)ShowTable.getModel();
         //ADD SHOW BUTTON
         String showid = "";
-        String movieidName = (String) movie3.getSelectedItem();
+        String movieidName = "";
+        if(movie3.getSelectedItem() == null){
+            JOptionPane.showMessageDialog(this, "No Movies Available");
+            return;
+        }
+        else{
+            movieidName = (String) movie3.getSelectedItem();
+        }
         //to get the movie id
         char[] tempmovie = movieidName.toCharArray();
         int counter = 0;
@@ -873,6 +884,10 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_ShowTableMouseClicked
 
     private void RemoveSelectedMovieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveSelectedMovieButtonActionPerformed
+        if(movieid_Remove == null){
+            JOptionPane.showMessageDialog(this, "No movie selected");
+            return;
+        }
         DefaultTableModel tblModel1 = (DefaultTableModel)MovieTable.getModel();
         DefaultTableModel tblModel2 = (DefaultTableModel)ShowTable.getModel();
 
@@ -1004,6 +1019,10 @@ public class StaffMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_fnbtableMouseClicked
 
     private void deletemenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletemenuActionPerformed
+        if(foodid_Remove==null){
+            JOptionPane.showMessageDialog(this, "No menu selected");
+            return;
+        }
         DefaultTableModel tblModel3 = (DefaultTableModel)fnbtable.getModel();
         deleteMenu(foodid_Remove);
         refreshMenu(tblModel3);
